@@ -1,5 +1,5 @@
 "use client"
-
+import React, { useEffect, useRef } from 'react';
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
 // import { ResponsiveLine } from "@nivo/line"
 import { Chart, Line } from 'react-chartjs-2';
@@ -68,26 +68,25 @@ export default function Component() {
 
 
 
-
     return (
-        <Card className="w-full p-8">
+        // on desktop - w-[80%]
+        <Card className="w-full ">
             <CardHeader className="flex flex-col items-start gap-1.5">
-                {/* <div className="grid gap-1.5"> */}
-                <CardTitle>Graph Analytics</CardTitle>
+                <CardTitle>
+                    Graph Analytics</CardTitle>
                 <CardDescription>Real-time Sensor Data</CardDescription>
-                {/* </div> */}
             </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2">
-                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg">
+            <CardContent className="flex flex-wrap justify-center items-stretch gap-4">
+                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full sm:w-1/2 xl:w-1/4 h-[400px] md:h-auto">
                     <Line data={data} options={options} />
                 </div>
-                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg">
+                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full sm:w-1/2 xl:w-1/4 h-[400px] md:h-auto">
                     <Line data={data} options={options} />
                 </div>
-                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg">
+                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full sm:w-1/2 xl:w-1/4 h-[400px] md:h-auto">
                     <Line data={data} options={options} />
                 </div>
-                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg">
+                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full sm:w-1/2 xl:w-1/4 h-[400px] md:h-auto">
                     <Line data={data} options={options} />
                 </div>
             </CardContent>

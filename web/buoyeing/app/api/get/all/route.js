@@ -1,3 +1,4 @@
+// /api/get/all
 import { connectToDatabase } from '@/utils/database';
 import { getAllBuoys } from '@/utils/getdata';
 

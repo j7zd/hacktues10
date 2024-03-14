@@ -9,19 +9,28 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
+    "@react-three/drei": "^9.102.3",
+    "@react-three/fiber": "^8.15.19",
     "chart.js": "^4.4.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "dotenv": "^16.4.5",
+    "framer-motion": "^11.0.13",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.357.0",
     "mongoose": "^8.2.1",
     "next": "13.5.6",
+    "next-themes": "^0.3.0",
     "next-transpile-modules": "^10.0.1",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
+    "react-leaflet": "^4.2.1",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "three": "^0.162.0",
+    "three-globe": "^2.31.0"
   },
   "devDependencies": {
     "autoprefixer": "^10",

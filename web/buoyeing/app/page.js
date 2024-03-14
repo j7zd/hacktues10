@@ -1,12 +1,31 @@
-"use client"
+// "use client"
 import 'leaflet/dist/leaflet.css';
 
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import MainMap from '@/components/mainMap';
 import { Button } from "@/components/ui/button"
-
+import { World } from '@/components/interactiveGlobe';
 
 export default function Home() {
+  const locations = [
+    { lat: 40.7128, lng: -74.0060, color: 'rgba(255, 165, 0, 0.5)' }, // New York
+    { lat: 34.0522, lng: -118.2437, color: 'rgba(0, 255, 0, 0.5)' }, // Los Angeles
+    { lat: 51.5074, lng: -0.1278, color: 'rgba(0, 0, 255, 0.5)' },   // London
+  ];
+
+  const globeConfig = {
+    pointSize: 0.05, // Size of points on the globe
+    globeColor: "#4287f5", // Color of the globe
+    showAtmosphere: true, // Show atmosphere effect
+    atmosphereColor: "#ffffff", // Color of the atmosphere
+    atmosphereAltitude: 0.1, // Altitude of the atmosphere effect
+    ambientLight: "#ffffff", // Color of the ambient light
+    directionalLeftLight: "#ffffff", // Color of directional light from left
+    directionalTopLight: "#ffffff", // Color of directional light from top
+    pointLight: "#ffffff", // Color of the point light
+    autoRotate: true, // Enable auto-rotation of the globe
+    autoRotateSpeed: 1, // Speed of auto-rotation
+  };
 
 
   return (
@@ -19,18 +38,12 @@ export default function Home() {
       </div>
 
       {/* map */}
-      <MapContainer className='w-full h-96' center={[42.501056, 27.472054]} zoom={13} scrollWheelZoom={true}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-      </MapContainer>
+      <MainMap />
 
       {/* docs and all bouys button */}
       <div className="flex space-x-4">
         <Button
           variant="outline"
-          // square big button
           className="px-6 py-3"
         >
           Docs
@@ -38,9 +51,15 @@ export default function Home() {
 
         <Button
           variant="outline"
+          className="px-6 py-3"
         >
           All Bouys
         </Button>
+      </div>
+
+      {/* globe */}
+      <div className="w-full h-96">
+        <World globeConfig={globeConfig} data={locations} />
       </div>
     </main>
   )

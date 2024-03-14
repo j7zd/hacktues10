@@ -1,17 +1,15 @@
+//turbitity means the cloudiness of the water
+
 #define Vclear 2
 
-class Turbidity {
-public:
-    Turbidity(int pin) {
-        this->pin = pin;
-    }
+int turbidityPin;
 
-    int read() {
-        float sensorValue = analogRead(pin);
-        float voltage = sensorValue * (5.0 / 1023.0);
-        float turbidity = 100.00 - (voltage/Vclear)*100;
-    }
+void turbiditySetup(int pin) {
+    turbidityPin = pin;
+}
 
-private:
-    int pin;
-};
+int readTurbidity() {
+    float sensorValue = analogRead(turbidityPin);
+    float voltage = sensorValue * (5.0 / 1023.0);
+    float turbidity = 100.00 - (voltage/Vclear)*100;
+}

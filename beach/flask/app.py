@@ -11,3 +11,4 @@ def receive_data():
     # if request.headers.get("api_key") != API_KEY:
     #     return "Unauthorized", 401
     print(data)
+    return 'OK'

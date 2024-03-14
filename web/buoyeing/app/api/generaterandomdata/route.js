@@ -35,8 +35,8 @@ const generateRandomData = (buoyUid) => {
     };
 };
 // ! DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA !
-const BUOY_UID = '7316e205-b0e4-4674-88b5-ce6ece871419'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
-const NAME = 'SHAMANduraaaaaaaaa'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
+const BUOY_UID = 'b5400c26-db58-422a-aac5-5c17468b9b0c'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
+const NAME = 'shamaaan'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
 const COORDS = [-70.0, 40.0]; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
 // ! DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA !
 
@@ -60,7 +60,7 @@ export async function POST(req, res) {
         await buoy.save();
     }
 
-    const sampleData = generateRandomData(buoy._id);
+    const sampleData = generateRandomData(buoy.uid);
 
     try {
         const newEntry = new BuoyData(sampleData);

@@ -1,76 +1,155 @@
 import { connectToDatabase } from '@/utils/database';
 import { getTimeframeDates, fetchDataForBuoy } from '@/utils/getdata';
-import mongoose from 'mongoose';
-import { NextResponse } from "next/server";
 
-export async function GET(req, { params, body }) {
+export async function GET(req, { params }) {
     await connectToDatabase();
-    // const { buoy_uid, timeframe } = req.query;
-    const buoy_uid = params.buoy_uid;
-    const timeframe = params.timeframe;
+    const { buoy_uid, timeframe } = params;
 
     try {
         const { startTime, endTime } = getTimeframeDates(timeframe);
         const dataEntries = await fetchDataForBuoy(buoy_uid, startTime, endTime);
 
-        // Generate labels based on the timeframe
+        // console.log('Data:', dataEntries);
+
         let labels = [];
-        let startDate = new Date(startTime);
-        while (startDate <= endTime) {
-            labels.push(startDate.toDateString()); // Or format as you prefer
-            startDate.setDate(startDate.getDate() + 1);
+        // let startDate = new Date(startTime);
+        // while (startDate <= endTime) {
+        //     labels.push(`${startDate.getUTCFullYear()}-${String(startDate.getUTCMonth() + 1).padStart(2, '0')}-${String(startDate.getUTCDate()).padStart(2, '0')}`);
+        //     startDate.setUTCDate(startDate.getUTCDate() + 1);
+        // }
+        // Assuming dataEntries is sorted by date:
+        if (dataEntries.length > 0) {
+            let firstEntryDate = new Date(dataEntries[0].timestamp);
+            let lastEntryDate = new Date(dataEntries[dataEntries.length - 1].timestamp);
+
+            // Adjust firstEntryDate and lastEntryDate to the start/end of their respective days if needed
+
+            while (firstEntryDate <= lastEntryDate) {
+                labels.push(`${firstEntryDate.getUTCFullYear()}-${String(firstEntryDate.getUTCMonth() + 1).padStart(2, '0')}-${String(firstEntryDate.getUTCDate()).padStart(2, '0')}`);
+                firstEntryDate.setUTCDate(firstEntryDate.getUTCDate() + 1);
+            }
         }
 
-        // Initialize datasets for each measurement
-        let datasets = [
-            { label: 'Horizontal Movement (m)', data: new Array(labels.length).fill(0), backgroundColor: '#2563eb', borderColor: '#4f46e5' },
-            { label: 'Vertical Movement (m)', data: new Array(labels.length).fill(0), backgroundColor: '#10b981', borderColor: '#059669' },
-            { label: 'Wind Direction (degrees)', data: new Array(labels.length).fill(0), backgroundColor: '#d97706', borderColor: '#b45309' },
-            { label: 'Wind Strength (m/s)', data: new Array(labels.length).fill(0), backgroundColor: '#dc2626', borderColor: '#b91c1c' },
-            { label: 'Air Temperature (°C)', data: new Array(labels.length).fill(0), backgroundColor: '#db2777', borderColor: '#be185d' },
-            { label: 'Air Humidity (%)', data: new Array(labels.length).fill(0), backgroundColor: '#0369a1', borderColor: '#075985' },
-            { label: 'Water Temperature (°C)', data: new Array(labels.length).fill(0), backgroundColor: '#9333ea', borderColor: '#7e22ce' },
-            { label: 'Water Salinity (PSU or PPT)', data: new Array(labels.length).fill(0), backgroundColor: '#eab308', borderColor: '#ca8a04' },
-            { label: 'Light Intensity (Lux)', data: new Array(labels.length).fill(0), backgroundColor: '#f97316', borderColor: '#ea580c' },
-            { label: 'Atmospheric Pressure (hPa or mBar)', data: new Array(labels.length).fill(0), backgroundColor: '#64748b', borderColor: '#475569' }
-        ];
 
-        // Prepare to calculate averages
-        const counts = new Array(datasets.length).fill(0).map(() => new Array(labels.length).fill(0));
 
-        // Aggregate data by day and calculate averages
+        let datasets = initializeDatasets(labels.length);
+
+        // console.log('datasets:', datasets);
+
+        // Initialize a structure to hold sums and counts for averaging
+        let sums = initializeSums(datasets.length, labels.length);
+        // console.log('sums:', sums);
+        let counts = initializeCounts(datasets.length, labels.length);
+        // console.log('counts:', counts);
+
         dataEntries.forEach(entry => {
-            const entryDateStr = entry.timestamp.toDateString();
-            const index = labels.indexOf(entryDateStr);
+            let entryLabel = `${entry.timestamp.getUTCFullYear()}-${String(entry.timestamp.getUTCMonth() + 1).padStart(2, '0')}-${String(entry.timestamp.getUTCDate()).padStart(2, '0')}`;
+            let index = labels.indexOf(entryLabel);
+
+            console.log('entryLabel:', entryLabel, labels, index);
             if (index !== -1) {
-                datasets[0].data[index] += entry.movement.horizontal; // Sum for average calculation
-                datasets[1].data[index] += entry.movement.vertical;
-                datasets[2].data[index] += entry.wind.direction;
-                datasets[3].data[index] += entry.wind.strength;
-                datasets[4].data[index] += entry.air.temp;
-                datasets[5].data[index] += entry.air.humidity;
-                datasets[6].data[index] += entry.water.temp;
-                datasets[7].data[index] += entry.water.salinity;
-                datasets[8].data[index] += entry.light;
-                datasets[9].data[index] += entry.atmosphericPressure;
-                counts.forEach(count => count[index] += 1); // Increment count for averaging
+                // console.log('entry:', entry);
+                aggregateData(entry, sums, counts, index);
             }
         });
 
-        // Calculate averages for each dataset
-        datasets.forEach((dataset, i) => {
-            dataset.data.forEach((sum, index) => {
-                dataset.data[index] = counts[i][index] > 0 ? sum / counts[i][index] : 0;
-            });
-        });
 
-        const response = { datasets };
+        // Calculate and set averages for each dataset
+        calculateAverages(datasets, sums, counts);
+        // console.log('Data:', datasets);
 
-        // res.status(200).json(response);
-        return NextResponse.json(response, { status: 200 });
+        // onsole.log('Data:', datasets);
+
+        return new Response(JSON.stringify({ datasets }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
         console.error('Error fetching data:', error);
-        // res.status(500).json({ message: 'Failed to fetch data', error: error.message });
-        return NextResponse.json({ message: 'Failed to fetch data', error: error.message }, { status: 500 });
+        return new Response(JSON.stringify({ message: 'Failed to fetch data', error: error.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 }
+
+function initializeDatasets(labelsLength) {
+    const measurementTypes = [
+        { label: 'Horizontal Movement (m)', color: '#2563eb' },
+        { label: 'Vertical Movement (m)', color: '#10b981' },
+        { label: 'Wind Direction (degrees)', color: '#d97706' },
+        { label: 'Wind Strength (m/s)', color: '#dc2626' },
+        { label: 'Air Temperature (°C)', color: '#db2777' },
+        { label: 'Air Humidity (%)', color: '#0369a1' },
+        { label: 'Water Temperature (°C)', color: '#9333ea' },
+        { label: 'Water Salinity (PSU or PPT)', color: '#eab308' },
+        { label: 'Light Intensity (Lux)', color: '#f97316' },
+        { label: 'Atmospheric Pressure (hPa or mBar)', color: '#64748b' }
+    ];
+
+
+
+    return measurementTypes.map(type => ({
+        label: type.label,
+        data: new Array(labelsLength).fill(0),
+        backgroundColor: type.color,
+        borderColor: type.color
+    }));
+}
+
+
+function initializeSums(datasetsLength, labelsLength) {
+    return new Array(datasetsLength).fill(0).map(() => new Array(labelsLength).fill(0));
+}
+
+function initializeCounts(datasetsLength, labelsLength) {
+    return new Array(datasetsLength).fill(0).map(() => new Array(labelsLength).fill(0));
+}
+
+
+function aggregateData(entry, sums, counts, index) {
+    // Aggregate data for each measurement
+    sums[0][index] += entry.movement.horizontal; // Assuming entry.movement.horizontal is directly accessible and a number
+    sums[1][index] += entry.movement.vertical;
+    sums[2][index] += entry.wind.direction;
+    sums[3][index] += entry.wind.strength;
+    sums[4][index] += entry.air.temp;
+    sums[5][index] += entry.air.humidity;
+    sums[6][index] += entry.water.temp;
+    sums[7][index] += entry.water.salinity;
+    sums[8][index] += entry.light;
+    sums[9][index] += entry.atmosphericPressure;
+
+    // Increment the count for averaging later
+    counts.forEach(countArray => countArray[index] += 1);
+}
+
+
+
+function calculateAverages(datasets, sums, counts) {
+    for (let i = 0; i < datasets.length; i++) {
+        for (let j = 0; j < datasets[i].data.length; j++) {
+            datasets[i].data[j] = counts[i][j] > 0 ? sums[i][j] / counts[i][j] : 0;
+        }
+    }
+}
+
+
+
+
+// const buoyDataSchema = new Schema({
+//     buoyUID: { type: String, ref: 'Buoy', required: true },
+//     timestamp: { type: Date, index: true },
+//     movement: {
+//         horizontal: Number,
+//         vertical: Number,
+//     },
+//     wind: {
+//         direction: Number, // ? Wind direction in degrees from true north ?
+//         strength: Number, // Wind speed (m/s)
+//     },
+//     air: {
+//         temp: Number, // Air temperature (v celzii)
+//         humidity: Number, // Humidity %
+//     },
+//     water: {
+//         temp: Number, // Water temperature (v celzii)
+//         salinity: Number, // Salinity ?(PSU ili PPT)?
+//     },
+//     light: Number, // Light intensity (Lux)
+//     atmosphericPressure: Number, // Atmospheric pressure ? (hPa ili mBar) ?
+// }, { timestamps: true });

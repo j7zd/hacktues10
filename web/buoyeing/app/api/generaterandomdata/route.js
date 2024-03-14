@@ -35,7 +35,7 @@ const generateRandomData = () => {
 };
 
 export async function POST(req, res) {
-    if (process.env.debug === 1) return NextResponse.json({ message: 'Debug mode is enabled' }, { status: 200 });
+    if (process.env.DEBUG === 1) return NextResponse.json({ message: 'Debug mode is enabled' }, { status: 200 });
 
     await connectToDatabase();
 

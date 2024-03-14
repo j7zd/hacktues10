@@ -32,6 +32,8 @@ const buoyDataSchema = new Schema({
 buoyDataSchema.index({ location: '2dsphere' });
 
 // Model creation
-const BuoyData = model('BuoyData', buoyDataSchema);
+// const BuoyData = model('BuoyData', buoyDataSchema);
+
+const BuoyData = mongoose.models.BuoyData || model('BuoyData', buoyDataSchema);
 
 export default BuoyData;

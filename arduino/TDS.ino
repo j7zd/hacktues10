@@ -1,20 +1,18 @@
 #include <EEPROM.h>
 #include "GravityTDS.h"
 
-// This is a class for mesuring water cuality. PPM is the unit of mesurement
-class TDS {
-    private:
-        GravityTDS gravityTds;
-    public:
-        TDS(int pin) {
-            gravityTds.setPin(pin);
-            gravityTds.setAref(5.0); 
-            gravityTds.setAdcRange(1024);  
-            gravityTds.begin(); 
-        }
+GravityTDS gravityTds; // Global GravityTDS object
 
-        float getTDS() {
-            gravityTds.update();  
-            return gravityTds.getTdsValue();  
-        }
-};
+// Initialization function
+void initTDS(int pin) {
+    gravityTds.setPin(pin);
+    gravityTds.setAref(5.0);  // Set the analog reference voltage
+    gravityTds.setAdcRange(1024);  // Set the ADC resolution
+    gravityTds.begin();  // Initialize the sensor
+}
+
+// Function to get the TDS value
+float getTDS() {
+    gravityTds.update();  
+    return gravityTds.getTdsValue();  // Return the TDS value
+}

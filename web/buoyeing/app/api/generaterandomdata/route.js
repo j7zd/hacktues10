@@ -1,7 +1,6 @@
 import { connectToDatabase } from '@/utils/database';
 import Buoy from '@/models/buoySchema';
 import BuoyData from '@/models/buoyDataSchema';
-import { NextResponse } from "next/server";
 
 // A helper function to generate random data
 const generateRandomData = (buoyUid) => {
@@ -36,8 +35,8 @@ const generateRandomData = (buoyUid) => {
     };
 };
 // ! DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA !
-const BUOY_UID = 'cfb4b6d0-8cd0-4c3f-8c92-c555c6950049'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
-const NAME = 'Treta shamandura buoy'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
+const BUOY_UID = '7316e205-b0e4-4674-88b5-ce6ece871419'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
+const NAME = 'SHAMANduraaaaaaaaa'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
 const COORDS = [-70.0, 40.0]; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
 // ! DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA !
 
@@ -68,9 +67,12 @@ export async function POST(req, res) {
         const savedEntry = await newEntry.save();
         // res.status(201).json({ message: 'Random data added successfully', data: savedEntry });
         // NextApiResponse.status(201).json({ message: 'Random data added successfully', data: savedEntry });
-        return NextResponse.json({ message: 'Random data added successfully', data: savedEntry }, { status: 201 });
+        // return NextResponse.json({ message: 'Random data added successfully', data: savedEntry }, { status: 201 });
+        // return new Response(JSON.stringify(response), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ message: 'Random data added successfully', data: savedEntry }), { status: 201, headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
         // res.status(500).json({ message: 'Failed to add random data', error: error.message });
-        return NextResponse.json({ message: 'Failed to add random data', error: error.message }, { status: 500 });
+        // return NextResponse.json({ message: 'Failed to add random data', error: error.message }, { status: 500 });
+        return new Response(JSON.stringify({ message: 'Failed to add random data', error: error.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 }

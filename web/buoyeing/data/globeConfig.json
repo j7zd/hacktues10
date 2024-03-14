@@ -1,0 +1,13 @@
+{
+    "pointSize": 0.05,
+    "globeColor": "#4287f5",
+    "showAtmosphere": true,
+    "atmosphereColor": "#ffffff",
+    "atmosphereAltitude": 0.1,
+    "ambientLight": "#ffffff",
+    "directionalLeftLight": "#ffffff",
+    "directionalTopLight": "#ffffff",
+    "pointLight": "#ffffff",
+    "autoRotate": true,
+    "autoRotateSpeed": 1
+}

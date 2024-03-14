@@ -5,6 +5,7 @@ import React from 'react';
 import MainMap from '@/components/mainMap';
 import { Button } from "@/components/ui/button"
 import { World } from '@/components/interactiveGlobe';
+import globeConfig from '@/data/globeConfig.json';
 
 export default function Home() {
   const locations = [
@@ -12,20 +13,6 @@ export default function Home() {
     { lat: 34.0522, lng: -118.2437, color: 'rgba(0, 255, 0, 0.5)' }, // Los Angeles
     { lat: 51.5074, lng: -0.1278, color: 'rgba(0, 0, 255, 0.5)' },   // London
   ];
-
-  const globeConfig = {
-    pointSize: 0.05, // Size of points on the globe
-    globeColor: "#4287f5", // Color of the globe
-    showAtmosphere: true, // Show atmosphere effect
-    atmosphereColor: "#ffffff", // Color of the atmosphere
-    atmosphereAltitude: 0.1, // Altitude of the atmosphere effect
-    ambientLight: "#ffffff", // Color of the ambient light
-    directionalLeftLight: "#ffffff", // Color of directional light from left
-    directionalTopLight: "#ffffff", // Color of directional light from top
-    pointLight: "#ffffff", // Color of the point light
-    autoRotate: true, // Enable auto-rotation of the globe
-    autoRotateSpeed: 1, // Speed of auto-rotation
-  };
 
 
   return (

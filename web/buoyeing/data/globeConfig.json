@@ -1,5 +1,5 @@
 {
-    "pointSize": 0.05,
+    "pointSize": 1,
     "globeColor": "#4287f5",
     "showAtmosphere": true,
     "atmosphereColor": "#ffffff",

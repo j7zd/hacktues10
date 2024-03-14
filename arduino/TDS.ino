@@ -17,4 +17,4 @@ class TDS {
             gravityTds.update();  
             return gravityTds.getTdsValue();  
         }
-}
+};

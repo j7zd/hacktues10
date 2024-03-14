@@ -1,5 +1,6 @@
 // dataHelper.js
 import BuoyData from '@/models/buoyDataSchema';
+import Buoy from '@/models/buoySchema';
 import mongoose from 'mongoose';
 
 export const getTimeframeDates = (timeframe) => {
@@ -38,3 +39,12 @@ export const fetchDataForBuoy = async (buoy_uid, startTime, endTime) => {
         throw error; // Rethrow the error to be handled or logged at a higher level
     }
 };
+
+export const getAllBuoys = async () => {
+    try {
+        return await Buoy.find({}).select('-_id').lean(); // bez `_id`, po-dobre
+    } catch (error) {
+        console.error('Error fetching buoy data:', error);
+        throw error; // Rethrow the error to be handled or logged at a higher level
+    }
+}

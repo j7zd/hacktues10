@@ -9,8 +9,8 @@ const generateRandomData = () => {
     location: {
       type: 'Point',
       coordinates: [
-        parseFloat((Math.random() * 180 - 90).toFixed(6)), // Longitude (-90 to 90)
-        parseFloat((Math.random() * 360 - 180).toFixed(6)), // Latitude (-180 to 180)
+        parseFloat((Math.random() * 360 - 180).toFixed(6)), // Longitude: -180 to 180
+        parseFloat((Math.random() * 180 - 90).toFixed(6)), // Latitude: -90 to 90
       ],
     },
     movement: {

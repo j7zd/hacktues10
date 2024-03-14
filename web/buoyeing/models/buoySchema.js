@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
 const buoySchema = new Schema({
-  id: { type: String, required: true, unique: true, index: true }, // identifier-a
+  uid: { type: String, required: true, unique: true, index: true }, // identifier-a
   name: { type: String, required: true }, // ime kato potrqbva za v budeshte
   location: {
     type: { type: String, default: 'Point' },

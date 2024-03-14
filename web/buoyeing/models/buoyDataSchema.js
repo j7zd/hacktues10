@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 
 const buoyDataSchema = new Schema({
-    buoyID: { type: Schema.Types.ObjectId, ref: 'Buoy', required: true },
+    buoyUID: { type: String, ref: 'Buoy', required: true },
     timestamp: { type: Date, index: true },
     movement: {
         horizontal: Number,

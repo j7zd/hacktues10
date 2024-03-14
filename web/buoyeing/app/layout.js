@@ -1,5 +1,7 @@
 import { Inter } from 'next/font/google'
-import { ThemeProvider } from "@/components/theme-provider"
+import { Providers } from "@/components/theme-provider"
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@nextui-org/react";
+
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -13,14 +15,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
+        <Providers
+          attribute="class" defaultTheme="dark"
+          // enableSystem
           disableTransitionOnChange
         >
           {children}
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   )

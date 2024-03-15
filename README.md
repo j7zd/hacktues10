@@ -1,11 +1,11 @@
 # HackTUESX: Back to the Roots
 
-![image](https://github.com/j7zd/hacktues10/assets/79153773/2421e718-3898-4221-bd5b-90d23d7459f1)
+ - ![image](https://github.com/j7zd/hacktues10/assets/79153773/2421e718-3898-4221-bd5b-90d23d7459f1)
 
 
 ## Подтема: Exploring the Infinite Ocean
 
-![image](https://github.com/j7zd/hacktues10/assets/79153773/5ff6cd2b-8137-42e7-8bc4-d20596c5f1d1)
+ - ![image](https://github.com/j7zd/hacktues10/assets/79153773/5ff6cd2b-8137-42e7-8bc4-d20596c5f1d1)
 
 
 ### Project Description

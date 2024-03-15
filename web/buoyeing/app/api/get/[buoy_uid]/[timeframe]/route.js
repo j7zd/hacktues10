@@ -79,8 +79,6 @@ function initializeDatasets(labelsLength) {
 
     ];
 
-
-
     return measurementTypes.map(type => ({
         label: type.label,
         data: new Array(labelsLength).fill(0),
@@ -89,28 +87,41 @@ function initializeDatasets(labelsLength) {
     }));
 }
 
-
 function initializeSums(datasetsLength, labelsLength) {
-    return new Array(datasetsLength).fill(0).map(() => new Array(labelsLength).fill(0));
+    try {
+        return new Array(datasetsLength).fill(0).map(() => new Array(labelsLength).fill(0));
+    } catch (error) {
+        console.error('Error initializing sums:', error);
+        throw error;
+    }
 }
 
 function initializeCounts(datasetsLength, labelsLength) {
-    return new Array(datasetsLength).fill(0).map(() => new Array(labelsLength).fill(0));
+    try {
+        return new Array(datasetsLength).fill(0).map(() => new Array(labelsLength).fill(0));
+    } catch (error) {
+        console.error('Error initializing counts:', error);
+        throw error;
+    }
 }
 
 
 function aggregateData(entry, sums, counts, index) {
     // Aggregate data for each measurement
-    sums[0][index] += entry.movement.horizontal; // Assuming entry.movement.horizontal is directly accessible and a number
-    sums[1][index] += entry.movement.vertical;
-    sums[2][index] += entry.wind.direction;
-    sums[3][index] += entry.wind.strength;
-    sums[4][index] += entry.air.temp;
-    sums[5][index] += entry.air.humidity;
-    sums[6][index] += entry.water.temp;
-    sums[7][index] += entry.water.salinity;
-    sums[8][index] += entry.light;
-    sums[9][index] += entry.atmosphericPressure;
+    // Air temperature
+    sums[0][index] += entry.air.temp;
+    // Air humidity
+    sums[1][index] += entry.air.humidity;
+    // Atmospheric pressure
+    sums[2][index] += entry.air.pressure;
+    // Water temperature
+    sums[3][index] += entry.water.temp;
+    // Water salinity
+    sums[4][index] += entry.water.salinity;
+    // Wave intensity
+    sums[5][index] += entry.water.wave_intensity;
+    // Turbidity
+    sums[6][index] += entry.water.turbidity;
 
     // Increment the count for averaging later
     counts.forEach(countArray => countArray[index] += 1);

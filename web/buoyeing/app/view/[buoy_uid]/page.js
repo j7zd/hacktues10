@@ -1,5 +1,6 @@
 "use client"
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
 // import { ResponsiveLine } from "@nivo/line"
 import { Chart, Line } from 'react-chartjs-2';
@@ -16,25 +17,32 @@ import {
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip);
 
-export default function Component() {
-    const data = {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [
-            {
-                label: 'Desktop',
-                data: [43, 137, 61, 145, 26, 154, 32, 12, 45, 78, 12, 45],
-                backgroundColor: '#2563eb',
-                borderColor: '#2563eb',
-            },
-            // {
-            //     label: 'Mobile',
-            //     data: [60, 48, 177, 78, 96, 204],
-            //     fill: false,
-            //     backgroundColor: '#e11d48',
-            //     borderColor: '#e11d48',
-            // },
-        ],
-    };
+export default function viewBuoy() {
+    const [data, setData] = useState({ datasets: [] });
+    const [requestData, setRequestData] = useState(1);
+    const [timeframe, setTimeframe] = useState('day'); // day, month, year
+
+    const searchParams = useSearchParams();
+    const buoy_uid = searchParams.get('buoy_uid');
+
+    useEffect(() => {
+        // fetch from /api/get/[buoy_uid]/[timeframe]
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/api/get/${buoy_uid}/${timeframe}`);
+                const data = await response.json();
+                setData(data);
+                console.log('Data:', data);
+                setRequestData(0);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        if (requestData) {
+            fetchData();
+        }
+    }, [requestData])
 
     const options = {
         responsive: true,

@@ -1,6 +1,6 @@
 #include <SoftwareSerial.h>
 #include <ArduinoJson.h>
-SoftwareSerial ESP8266(2, 3); // Rx, Tx
+SoftwareSerial ESP8266(6, 5); // Rx, Tx
 
 #define UID qwerty
 #define NAME 6rek
@@ -8,7 +8,7 @@ SoftwareSerial ESP8266(2, 3); // Rx, Tx
 #define LATITUDE 42.0
 
 #define TDS_PIN A1
-#define TEMP_PIN A0
+#define TEMP_PIN A3
 #define TURBIDITY_PIN A0
 
 
@@ -29,9 +29,12 @@ void setup() {
   initTDS(TDS_PIN);
   turbiditySetup(TURBIDITY_PIN);
   WaveSensorINIT();
+
+  Serial.print("Finished init");
 }
 
 void loop() {
+
   double pressure, air_temperature;
   PresAndTempAir(air_temperature, pressure);
   double humidity = HumidityAir();
@@ -39,6 +42,16 @@ void loop() {
   double water_temperature = readTemperature(TEMP_PIN);
   double turbidity = readTurbidity();
   double wave_intensity = CalculateWaves();
+  
+  Serial.println("Pressure: " + String(pressure, 2) + " Pa");
+  Serial.println("Temperature: " + String(air_temperature, 2) + " C");
+  Serial.println("Humidity: " + String(humidity, 2) + " %");
+  Serial.println("Salinity: " + String(salinity, 2) + " ppm");
+  Serial.println("Water Temperature: " + String(water_temperature, 2) + " C");
+  Serial.println("Turbidity: " + String(turbidity, 2) + " NTU");
+  Serial.println("Wave Intensity: " + String(wave_intensity, 2) + " m/s^2");
+
+  delay(10000);
 }
 
 void connectToWiFi() {

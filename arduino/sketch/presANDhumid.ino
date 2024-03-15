@@ -3,7 +3,7 @@
 #include <Bonezegei_DHT11.h>
 
 SFE_BMP180 bmp180;
-Bonezegei_DHT11 dht(A0);
+Bonezegei_DHT11 dht(11);
 
 void PresureAndTemperatureSetup() {
   bmp180.begin();

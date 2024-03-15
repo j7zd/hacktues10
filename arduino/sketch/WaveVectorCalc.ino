@@ -45,7 +45,10 @@ float CalculateWaves()
   float VectorWaves[200] = {};
   float tmp = 0;
   //gathering data for 10 secounds to get theaverage movement of the wave (up and down)
+  Serial.println("ass");
   for (int i = 0 ; i < 200 ; i++) {
+    Serial.println("looping"); // FOR DEBUG
+
     // read the 'raw' data in 14-bit counts
     mma.read();
 

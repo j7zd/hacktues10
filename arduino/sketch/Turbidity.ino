@@ -1,6 +1,6 @@
 //turbitity means the cloudiness of the water
 
-#define Vclear 2
+#define Vclear 2.82
 
 int turbidityPin;
 

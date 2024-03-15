@@ -1,18 +1,15 @@
-#include "dht.h"
 #include <Wire.h>
 #include <SFE_BMP180.h>
-#define dht_apin A0
+#include <Bonezegei_DHT11.h>
 
 SFE_BMP180 bmp180;
-dht DHT;
+Bonezegei_DHT11 dht(A0);
 struct PresTemp {float pressure, temperature;};
 
 void setup() {
-  Serial.begin(9600);
-  delay(1000);
 }
 void loop() {
-  delay(5000);
+  delay(1000);
 }
 void PresureAndTemperatureSetup() {
   bmp180.begin();
@@ -20,6 +17,7 @@ void PresureAndTemperatureSetup() {
 }
 
 void HumiditySetup() {
+  dht.begin();
   return;// this is only for aestetics and so all sensors and modules have an init
 }
 //all functions to measure are the same logic
@@ -28,7 +26,6 @@ struct PresTemp PresAndTempAir() {
   float pressure_sum=0;//add up var for average
   float temperature = 0;
   float temperature_sum = 0;
-  float sample[20] = {};//sample array 
   int sample_size = 20, i = 0;
   
   double T, P;
@@ -60,15 +57,15 @@ struct PresTemp PresAndTempAir() {
   struct PresTemp prestemp = {pressure, temperature};
   return prestemp;
 }
-float HumidityAir() {
-  float humidity=0;
-  float humidity_sum=0;
-  float sample[20] = {};
-  int sample_size = 20;
+double HumidityAir() {
+  double humidity=0;
+  double humidity_sum=0;
+  double sample[10] = {};
+  int sample_size = 10;
 
   for (int i = 0; i < sample_size; i++) {
-    DHT.read11(dht_apin);
-    sample[i] = DHT.humidity;
+    dht.getData();
+    sample[i] = dht.getHumidity();
     delay(50);
   }
   for (int i = 0; i < sample_size; i++) {

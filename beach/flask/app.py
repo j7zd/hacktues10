@@ -1,8 +1,10 @@
 from flask import Flask, request
 from os import getenv
 from datetime import datetime
+import requests
 
 API_KEY = getenv("API_KEY")
+send_url = getenv("SEND_URL")
 
 app = Flask(__name__)
 
@@ -16,14 +18,19 @@ def receive_data():
     currtime = datetime.now()
 
     data = {}
-    data['UID'] = received['UID']
+    data['UID'] = str(received['UID'])
     data['timestamp'] = currtime.strftime("%Y-%m-%d %H:%M:%S")
-    data['wave_intensity'] = received['wave_intensity']
-    data['turbidity'] = received['turbidity']
-    data['water_temperature'] = received['water_temperature']
-    data['salinity'] = received['salinity']
-    data['air_temperature'] = received['air_temperature']
-    data['humidity'] = received['humidity']
-    data['pressure'] = received['pressure']
+    data['wave_intensity'] = float(received['wave_intensity'])
+    data['turbidity'] = float(received['turbidity'])
+    data['water_temperature'] = float(received['water_temperature'])
+    data['salinity'] = float(received['salinity'])
+    data['air_temperature'] = float(received['air_temperature'])
+    data['humidity'] = float(received['humidity'])
+    data['pressure'] = float(received['pressure'])
+    data['latitude'] = float(received['latitude'])
+    data['longitude'] = float(received['longitude'])
+    data['name'] = str(received['name'])
+
+    requests.post(send_url, json=data)
 
     return 'OK'

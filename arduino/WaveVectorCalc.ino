@@ -1,12 +1,15 @@
-#include <Wire.h>
 #include <Adafruit_MMA8451.h>
 #include <Adafruit_Sensor.h>
 
 Adafruit_MMA8451 mma = Adafruit_MMA8451();
 
+
+bool DEBUG_VAR = true;
+bool DEBUG_SEE_VAL = false;
+
 void setup(void) {
   Serial.begin(9600);
-
+  WaveSensorINIT();
 
 }
 
@@ -20,9 +23,11 @@ void WaveSensorINIT()
   }
   mma.setRange(MMA8451_RANGE_2_G);
   Serial.println("Senesor is INIT-ed");
+  CalculateWaves();
+  Serial.println("end of setup");
   }
 
-int CalculateWaves()
+float CalculateWaves()
 {
   //const variables for sample size and averaging
   const int SampleSize = 200;
@@ -38,12 +43,12 @@ int CalculateWaves()
   float averageX = 0; //var for seperating the averaging data from the processing X
   float averageY = 0;
   float averageZ = 0;
-  int finalX = 0;
-  int finalY = 0;
-  int finalZ = 0;
-  int Vector = 0;
-  int VectorWaves[200] = {};
-  int tmp;
+  float finalX = 0;
+  float finalY = 0;
+  float finalZ = 0;
+  float Vector = 0;
+  float VectorWaves[200] = {};
+  float tmp = 0;
   //gathering data for 10 secounds to get theaverage movement of the wave (up and down)
   for (int i = 0 ; i < 200 ; i++) {
     // read the 'raw' data in 14-bit counts
@@ -73,22 +78,29 @@ int CalculateWaves()
     averageX = totalX / numReadings;
     averageY = totalY / numReadings;
     averageZ = totalZ / numReadings;
-    //offsets sum
-    averageX += -0.2;
-    averageY += 0.30;
-    averageZ += -10;
+    
     // removing the last decimal because it is too static and generates unwanted noise
-    finalX = averageX * 10;
-    finalY = averageY * 10;
-    finalZ = averageZ * 10;
+    finalX = round(averageX * 10.0) / 10.0;
+    finalY = round(averageY * 10.0) / 10.0;
+    finalZ = round(averageZ * 10.0) / 10.0;
+    //offsets sum
+    finalX += 0;
+    finalY += 0;
+    finalZ += 0;
+    //only For debuging (maybe) when the sensor is upside down
+    if(DEBUG_VAR){
+      finalX *= -1;
+      finalY *= -1;
+      finalZ *= -1;
+  }
     // display the results  FOR DEBUG
-    /*
+    if(DEBUG_SEE_VAL){
       Serial.print("X: \t"); Serial.print(finalX); Serial.print("\t");
       Serial.print("Y: \t"); Serial.print(finalY); Serial.print("\t");
       Serial.print("Z: \t"); Serial.print(finalZ); Serial.print("\t");
-    */
+      Serial.println();
+    }
     Vector = finalX + finalY + finalZ;
-    Vector *= -1; //sesor may be upside-down so this can be enabled depends on code but i wont remove it before i know its position in the robot
     VectorWaves[i] = Vector;
     delay(50);
   }
@@ -98,12 +110,14 @@ int CalculateWaves()
     tmp += VectorWaves[x];
   }
 
-  return tmp / SampleSize;
+  return abs(tmp / SampleSize);
 
 
 }
 void loop() {
-  int i = CalculateWaves();
-  Serial.println(i);
+  float i = CalculateWaves();
+  if(!DEBUG_SEE_VAL){
+    Serial.println(i);
+  }
   delay(2000);
 }

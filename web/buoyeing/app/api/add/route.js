@@ -12,7 +12,7 @@ export async function POST(req) {
         const { wave_intensity, turbidity, water_temperature, salinity, air_temperature, humidity, pressure, uid, name, lat, lng } = await req.json();
 
         // Find or create Buoy
-        let buoy = await Buoy.findOne({ uid: uid });
+        let buoy = await Buoy.findOne({ uid: uid })
         if (!buoy) {
             const generatedUID = uuidv4();
             console.log(generatedUID);

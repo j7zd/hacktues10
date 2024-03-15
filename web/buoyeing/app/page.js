@@ -6,7 +6,9 @@ import dynamic from 'next/dynamic';
 import MainButtons from '@/components/mainButtons';
 import globeConfig from '@/data/globeConfig.json';
 import 'leaflet/dist/leaflet.css'; // Ensure Leaflet's CSS is loaded
+import { Bebas_Neue } from 'next/font/google';
 
+const bebas = Bebas_Neue({ subsets: ['latin'], weight: ['400'], variable: '--font-bebas', display: 'swap' })
 
 const MainMap = dynamic(() => import('@/components/mainMap'), { ssr: false });
 const DynamicWorld = dynamic(() => import('@/components/interactiveGlobe').then((mod) => mod.World), {
@@ -49,8 +51,12 @@ export default function Home() {
     <main className="flex flex-col items-center justify-between p-4 bg-gray-900 text-white">
       <div className="flex flex-col md:flex-row w-full items-center md:justify-center space-y-4 md:space-y-0 md:space-x-10 pt-10">
         <div className="w-full md:w-auto flex flex-col items-center text-center md:max-w-[50%]">
-          <h1 className="text-5xl font-bold text-indigo-400">Шамандурите На Бъдещето</h1>
-          <p className="text-lg text-gray-300 md:max-w-[90%]">От нестойностен отпадък, в стойностна шамандура, разгледайте как нашите устройства правят разлика!</p>
+          {/* <h1 className="text-5xl font-bold text-indigo-400">Шамандурите На Бъдещето</h1> */}
+          <div className={bebas.className}>
+            {/* <h1 className="text-5xl font-bold text-indigo-400">Шамандурите На Бъдещето</h1> */}
+            <h1 className="text-9xl font-bold text-indigo-400">Smart Buoy</h1>
+          </div>
+          <p className="text-lg text-gray-300 mt-2">От нестойностен отпадък, в стойностна шамандура. <br />Разгледайте как нашите устройства правят <span className='font-bold text-indigo-400'>разликата</span>!</p>
         </div>
         <div className="w-full md:w-auto h-96 aspect-square flex items-center justify-center">
           {/* <World key={locations.length} globeConfig={globeConfig} data={locations} /> */}

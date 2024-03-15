@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google'
+import { Inter, Bebas_Neue } from 'next/font/google'
 import { Providers } from "@/components/theme-provider"
 import './globals.css'
 import NavBar from '@/components/navbar'

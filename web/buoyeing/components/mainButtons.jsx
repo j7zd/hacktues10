@@ -12,7 +12,7 @@ import {
 
 export default function MainButtons() {
     return (
-        <div className="flex space-x-4 m-4">
+        <div className="flex space-x-4">
             {/* <Button
             // variant="outline"
             // className="px-6 py-3 border-gray-600 text-white hover:bg-gray-700 hover:border-gray-500"
@@ -23,7 +23,7 @@ export default function MainButtons() {
                 </CardHeader>
                 <CardContent>
                     <CardDescription>
-                        Документацията на публичния API.
+                        Документацията на публичния API
                     </CardDescription>
                 </CardContent>
                 <CardFooter>

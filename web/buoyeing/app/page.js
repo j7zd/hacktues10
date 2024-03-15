@@ -51,11 +51,11 @@ export default function Home() {
         </div>
       </div>
 
-      <p className="mt-4 text-lg text-gray-300">Разгледай различните изследователски шамандури на Бургас!</p>
+      <h2 className="my-4 text-lg text-gray-300">Разгледай различните изследователски шамандури около Бургас!</h2>
 
       <MainMap />
 
-      <div className="flex space-x-4">
+      <div className="flex space-x-4 mt-6">
         <MainButtons />
       </div>
     </main>

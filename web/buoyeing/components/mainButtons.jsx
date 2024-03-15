@@ -17,13 +17,13 @@ export default function MainButtons() {
             // variant="outline"
             // className="px-6 py-3 border-gray-600 text-white hover:bg-gray-700 hover:border-gray-500"
             > */}
-            <Card>
+            <Card className="bg-gray-800 border-gray-700 shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 cursor-pointer">
                 <CardHeader>
                     <CardTitle>Docs</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <CardDescription>
-                        View the documentation for the buoy data API
+                        Документацията на публичния API.
                     </CardDescription>
                 </CardContent>
                 <CardFooter>
@@ -37,13 +37,13 @@ export default function MainButtons() {
             </Card>
             {/* </Button> */}
 
-            <Card>
+            <Card className="bg-gray-800 border-gray-700 shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 cursor-pointer">
                 <CardHeader>
                     <CardTitle>All Buoys</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <CardDescription>
-                        View all buoys in the network
+                        Вижте всички свързани и активни шамандури към мрежата
                     </CardDescription>
                 </CardContent>
                 <CardFooter>
@@ -51,7 +51,7 @@ export default function MainButtons() {
                     // variant="outline"
                     // className="px-6 py-3 border-gray-600 text-white hover:bg-gray-700 hover:border-gray-500"
                     >
-                        View All Buoys
+                        Виж всички шамандури
                     </Button>
                 </CardFooter>
             </Card>

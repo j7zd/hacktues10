@@ -16,7 +16,7 @@ const markerIcon = L.icon({
 
 export default function MainMap({ locations }) {
     return (
-        <MapContainer className='w-full h-96' center={[42.501056, 27.472054]} zoom={12} scrollWheelZoom={true}>
+        <MapContainer className='w-full h-96 rounded-2xl' center={[42.501056, 27.472054]} zoom={12} scrollWheelZoom={true}>
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

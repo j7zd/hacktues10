@@ -64,10 +64,13 @@ export default function Home() {
         </div>
       </div>
 
-      <h2 className="my-4 text-xl text-gray-300 text-center ">Разгледайте различните изследователски шамандури около Бургас!</h2>
+      <h2 className="my-4 text-xl text-gray-300 text-center">Разгледайте различните изследователски шамандури около Бургас!</h2>
 
-      <MainMap locations={locations} />
-      {/* <HeatmapComponent data={heatmapLocations} /> */}
+
+        <MainMap locations={locations} />
+        {/* <HeatmapComponent data={heatmapLocations} /> */}
+
+
 
       <div className="flex space-x-4 mt-6">
         <MainButtons key={locations.length} locations={locations} />

@@ -1,5 +1,6 @@
 from flask import Flask, request
 from os import getenv
+from datetime import datetime
 
 API_KEY = getenv("API_KEY")
 
@@ -12,7 +13,11 @@ def receive_data():
     #     return "Unauthorized", 401
     print(received, flush=True)
 
+    currtime = datetime.now()
+
     data = {}
+    data['UID'] = received['UID']
+    data['timestamp'] = currtime.strftime("%Y-%m-%d %H:%M:%S")
     data['wave_intensity'] = received['wave_intensity']
     data['turbidity'] = received['turbidity']
     data['water_temperature'] = received['water_temperature']

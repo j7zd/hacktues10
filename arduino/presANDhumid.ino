@@ -7,30 +7,9 @@ Bonezegei_DHT11 dht(A0);
 struct PresTemp {float pressure, temperature;};
 
 void setup() {
-  PresureAndTemperatureSetup();
-  HumiditySetup();
-  Serial.begin(9600);
-  delay(500);
 }
 void loop() {
-  
-  PresTemp presTempData = PresAndTempAir();
-
-  Serial.print("Pressure: ");
-  Serial.print(presTempData.pressure);
-  Serial.println(" hPa");
-
-  Serial.print("Temperature: ");
-  Serial.print(presTempData.temperature);
-  Serial.println(" C");
-  
-  double humidity = HumidityAir();
-
-  Serial.print("Humidity: ");
-  Serial.print(humidity);
-  Serial.println("%");
   delay(1000);
-  
 }
 void PresureAndTemperatureSetup() {
   bmp180.begin();

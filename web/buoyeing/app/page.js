@@ -51,7 +51,7 @@ export default function Home() {
         </div>
       </div>
 
-      <h2 className="my-4 text-lg text-gray-300">Разгледай различните изследователски шамандури около Бургас!</h2>
+      <h2 className="my-4 text-lg text-gray-300">Разгледайте различните изследователски шамандури около Бургас!</h2>
 
       <MainMap />
 

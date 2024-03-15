@@ -17,7 +17,7 @@ export default function MainButtons() {
             // variant="outline"
             // className="px-6 py-3 border-gray-600 text-white hover:bg-gray-700 hover:border-gray-500"
             > */}
-            <Card className="bg-gray-800 border-gray-700 shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 cursor-pointer">
+            <Card className="bg-gray-800 border-gray-700 shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 cursor-pointer w-auto">
                 <CardHeader>
                     <CardTitle>Docs</CardTitle>
                 </CardHeader>
@@ -26,18 +26,18 @@ export default function MainButtons() {
                         Документацията на публичния API
                     </CardDescription>
                 </CardContent>
-                <CardFooter>
+                {/* <CardFooter>
                     <Button
                     // variant="outline"
                     // className="px-6 py-3 border-gray-600 text-white hover:bg-gray-700 hover:border-gray-500"
                     >
                         View Docs
                     </Button>
-                </CardFooter>
+                </CardFooter> */}
             </Card>
             {/* </Button> */}
 
-            <Card className="bg-gray-800 border-gray-700 shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 cursor-pointer">
+            <Card className="bg-gray-800 border-gray-700 shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 cursor-pointer w-auto">
                 <CardHeader>
                     <CardTitle>All Buoys</CardTitle>
                 </CardHeader>
@@ -46,14 +46,14 @@ export default function MainButtons() {
                         Вижте всички свързани и активни шамандури към мрежата
                     </CardDescription>
                 </CardContent>
-                <CardFooter>
+                {/* <CardFooter>
                     <Button
                     // variant="outline"
                     // className="px-6 py-3 border-gray-600 text-white hover:bg-gray-700 hover:border-gray-500"
                     >
                         Виж всички шамандури
                     </Button>
-                </CardFooter>
+                </CardFooter> */}
             </Card>
 
         </div>

@@ -5,24 +5,17 @@ const { Schema, model } = mongoose;
 const buoyDataSchema = new Schema({
     buoyUID: { type: String, ref: 'Buoy', required: true },
     timestamp: { type: Date, index: true },
-    movement: {
-        horizontal: Number,
-        vertical: Number,
-    },
-    wind: {
-        direction: Number, // ? Wind direction in degrees from true north ?
-        strength: Number, // Wind speed (m/s)
-    },
     air: {
         temp: Number, // Air temperature (v celzii)
         humidity: Number, // Humidity %
+        pressure: Number, // Air pressure ? (hPa ili mBar) ?
     },
     water: {
         temp: Number, // Water temperature (v celzii)
         salinity: Number, // Salinity ?(PSU ili PPT)?
-    },
-    light: Number, // Light intensity (Lux)
-    atmosphericPressure: Number, // Atmospheric pressure ? (hPa ili mBar) ?
+        wave_intensity: Number, // Wave intensity (m)
+        turbidity: Number, // Turbidity ?(NTU ili FNU)?
+    }
 }, { timestamps: true });
 
 

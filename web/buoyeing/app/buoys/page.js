@@ -21,10 +21,13 @@ export default function Component() {
     return (
         <main className="flex flex-col items-center p-4 bg-gray-900 text-white min-h-screen">
             <h1 className="text-4xl font-bold mb-4">Всички шамандури</h1>
-            {/* Grid container with 4 columns as an example, adjust `grid-cols-{n}` as needed */}
-            <div className="grid grid-cols-4 gap-4 w-full max-w-4xl">
+            {/* Flex container for buttons, allowing wrap */}
+            <div className="flex flex-wrap justify-center gap-4 w-full max-w-4xl">
                 {allBuoys && allBuoys.map((buoy, index) => (
-                    <Button variant="secondary" key={index} onClick={() => window.location.href = `/view/${buoy._id}`}>{buoy.name}</Button>
+                    // Adjust Button component or style as needed to ensure it grows with its content
+                    <Button variant="secondary" key={index} style={{ whiteSpace: 'nowrap' }} onClick={() => window.location.href = `/view/${buoy._id}`}>
+                        {buoy.name}
+                    </Button>
                 ))}
             </div>
         </main>

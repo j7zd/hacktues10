@@ -46,7 +46,6 @@ void loop() {
   String jsonData = "{\"uid\":\"" + String(UID) + "\",\"name\":\"" + String(NAME) + "\",\"longtitude\":" + String(LONGTITUDE, 6) + ",\"latitude\":" + String(LATITUDE, 6) + ",\"pressure\":" + String(pressure, 2) + ",\"air_temperature\":" + String(air_temperature, 2) + ",\"humidity\":" + String(humidity, 2) + ",\"salinity\":" + String(salinity, 2) + ",\"water_temperature\":" + String(water_temperature, 2) + ",\"turbidity\":" + String(turbidity, 2) + ",\"wave_intensity\":" + String(wave_intensity, 2) + "}";
 
   if (startTCPConnection()) {
-    String jsonData = "{\"temp\":" + String(temperature, 2) + "}";
     sendHTTPPostRequest(jsonData);
   }
   

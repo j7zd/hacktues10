@@ -18,7 +18,7 @@ unsigned long startTime = 0;
 String myAPIkey = "1YJXB9J5RLDOURL6"; // Your Write API Key
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   ESP8266.begin(9600);
   startTime = millis();
   connectToWiFi();
@@ -28,9 +28,9 @@ void setup() {
   HumiditySetup();
   initTDS(TDS_PIN);
   turbiditySetup(TURBIDITY_PIN);
-  WaveSensorINIT();
+  //WaveSensorINIT();
 
-  Serial.print("Finished init");
+  Serial.println("Finished init");
 }
 
 void loop() {
@@ -41,7 +41,7 @@ void loop() {
   double salinity = getTDS();
   double water_temperature = readTemperature(TEMP_PIN);
   double turbidity = readTurbidity();
-  double wave_intensity = CalculateWaves();
+  //double wave_intensity = CalculateWaves();
   
   Serial.println("Pressure: " + String(pressure, 2) + " Pa");
   Serial.println("Temperature: " + String(air_temperature, 2) + " C");
@@ -49,7 +49,7 @@ void loop() {
   Serial.println("Salinity: " + String(salinity, 2) + " ppm");
   Serial.println("Water Temperature: " + String(water_temperature, 2) + " C");
   Serial.println("Turbidity: " + String(turbidity, 2) + " NTU");
-  Serial.println("Wave Intensity: " + String(wave_intensity, 2) + " m/s^2");
+  //Serial.println("Wave Intensity: " + String(wave_intensity, 2) + " m/s^2");
 
   delay(10000);
 }

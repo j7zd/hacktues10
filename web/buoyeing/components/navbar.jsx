@@ -10,9 +10,9 @@ function NavBar() {
   const menuItems = [
     {label: "Documentation", color: "foreground", href: "#"},
     {label: "Buoys", color: "foreground", href: "#"},
-    {label: "Demo", color: "primary", href: "#"},
+    {label: "Demo", color: "foreground", href: "#"},
     {label: "HTX Team", color: "foreground", href: "https://hacktues.bg/teams/nikva-stoynost"},
-    {label: "GitHub", color: "danger", href: "https://github.com/j7zd/hacktues10"}
+    {label: "GitHub", color: "foreground", href: "https://github.com/j7zd/hacktues10"}
   ];
 
 
@@ -59,14 +59,12 @@ function NavBar() {
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
-              color={
-                index === 2 ? "primary" : index === menuItems.length - 1 ? "danger" : "foreground"
-              }
+              color={item.color}
               className="w-full"
-              href="#"
+              href={item.href}
               size="lg"
             >
-              {item}
+              {item.label}
             </Link>
           </NavbarMenuItem>
         ))}

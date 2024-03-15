@@ -25,7 +25,7 @@ export default function Component() {
             <div className="flex flex-wrap justify-center gap-4 w-full max-w-4xl">
                 {allBuoys && allBuoys.map((buoy, index) => (
                     // Adjust Button component or style as needed to ensure it grows with its content
-                    <Button variant="secondary" key={index} style={{ whiteSpace: 'nowrap' }} onClick={() => window.location.href = `/view/${buoy._id}`}>
+                    <Button variant="secondary" key={index} style={{ whiteSpace: 'nowrap' }} onClick={() => window.location.href = `/view/${buoy.uid}`}>
                         {buoy.name}
                     </Button>
                 ))}

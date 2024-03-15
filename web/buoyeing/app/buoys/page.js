@@ -24,7 +24,7 @@ export default function Component() {
             {/* Grid container with 4 columns as an example, adjust `grid-cols-{n}` as needed */}
             <div className="grid grid-cols-4 gap-4 w-full max-w-4xl">
                 {allBuoys && allBuoys.map((buoy, index) => (
-                    <Button variant="secondary" key={index} onClick={() => window.location.href = `/buoys/${buoy._id}`}>{buoy.name}</Button>
+                    <Button variant="secondary" key={index} onClick={() => window.location.href = `/view/${buoy._id}`}>{buoy.name}</Button>
                 ))}
             </div>
         </main>

@@ -2,17 +2,18 @@
 
 import React from 'react';
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button } from "@nextui-org/react";
+import { BuoyIcon } from '@/components/buoyIcon';
 
 
 function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const menuItems = [
-    {label: "Documentation", color: "foreground", href: "#"},
-    {label: "Buoys", color: "foreground", href: "#"},
-    {label: "Demo", color: "foreground", href: "#"},
-    {label: "HTX Team", color: "foreground", href: "https://hacktues.bg/teams/nikva-stoynost"},
-    {label: "GitHub", color: "foreground", href: "https://github.com/j7zd/hacktues10"}
+    { label: "Documentation", color: "foreground", href: "#" },
+    { label: "Buoys", color: "foreground", href: "#" },
+    { label: "Demo", color: "foreground", href: "#" },
+    { label: "HTX Team", color: "foreground", href: "https://hacktues.bg/teams/nikva-stoynost" },
+    { label: "GitHub", color: "foreground", href: "https://github.com/j7zd/hacktues10" }
   ];
 
 
@@ -24,30 +25,33 @@ function NavBar() {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <p className="font-bold text-inherit">Шамандура със стойност</p>
+          {/* <BuoyIcon /> */}
+          <Link color="foreground" href="/">
+            <p className="font-bold text-inherit">Шамандура със стойност</p>
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           <Link color="foreground" href="#">
-            Documentation
+            Документация
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="#" aria-current="page">
-            Buoys
+          <Link href="/buoys" aria-current="page">
+            Шамандури
           </Link>
         </NavbarItem>
         <NavbarItem>
           <Link color="foreground" href="https://hacktues.bg/teams/nikva-stoynost">
-            HTX Team
+            Отборът ни
           </Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="#">Demo</Link>
+          <Link href="#">Демо</Link>
         </NavbarItem>
         <NavbarItem>
           <Button as={Link} color="primary" href="https://github.com/j7zd/hacktues10" variant="flat">

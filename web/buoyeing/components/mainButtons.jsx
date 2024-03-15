@@ -20,7 +20,7 @@ export default function MainButtons() {
                 }}
             >
                 <CardHeader>
-                    <CardTitle>Docs</CardTitle>
+                    <CardTitle>Документация</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <CardDescription>
@@ -36,7 +36,7 @@ export default function MainButtons() {
                 }}
             >
                 <CardHeader>
-                    <CardTitle>All Buoys</CardTitle>
+                    <CardTitle>Всички шамандури</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <CardDescription>

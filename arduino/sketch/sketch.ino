@@ -2,8 +2,8 @@
 #include <ArduinoJson.h>
 SoftwareSerial ESP8266(6, 5); // Rx, Tx
 
-#define UID qwerty
-#define NAME 6rek
+#define UID "qwerty"
+#define NAME "6rek"
 #define LONGTITUDE 69.6
 #define LATITUDE 42.0
 
@@ -41,16 +41,15 @@ void loop() {
   double salinity = getTDS();
   double water_temperature = readTemperature(TEMP_PIN);
   double turbidity = readTurbidity();
-  //double wave_intensity = CalculateWaves();
+  double wave_intensity = 0;
   
-  Serial.println("Pressure: " + String(pressure, 2) + " Pa");
-  Serial.println("Temperature: " + String(air_temperature, 2) + " C");
-  Serial.println("Humidity: " + String(humidity, 2) + " %");
-  Serial.println("Salinity: " + String(salinity, 2) + " ppm");
-  Serial.println("Water Temperature: " + String(water_temperature, 2) + " C");
-  Serial.println("Turbidity: " + String(turbidity, 2) + " NTU");
-  //Serial.println("Wave Intensity: " + String(wave_intensity, 2) + " m/s^2");
+  String jsonData = "{\"uid\":\"" + String(UID) + "\",\"name\":\"" + String(NAME) + "\",\"longtitude\":" + String(LONGTITUDE, 6) + ",\"latitude\":" + String(LATITUDE, 6) + ",\"pressure\":" + String(pressure, 2) + ",\"air_temperature\":" + String(air_temperature, 2) + ",\"humidity\":" + String(humidity, 2) + ",\"salinity\":" + String(salinity, 2) + ",\"water_temperature\":" + String(water_temperature, 2) + ",\"turbidity\":" + String(turbidity, 2) + ",\"wave_intensity\":" + String(wave_intensity, 2) + "}";
 
+  if (startTCPConnection()) {
+    String jsonData = "{\"temp\":" + String(temperature, 2) + "}";
+    sendHTTPPostRequest(jsonData);
+  }
+  
   delay(10000);
 }
 

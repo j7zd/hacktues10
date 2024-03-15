@@ -27,8 +27,8 @@ def receive_data():
     data['air_temperature'] = float(received['air_temperature'])
     data['humidity'] = float(received['humidity'])
     data['pressure'] = float(received['pressure'])
-    data['latitude'] = float(received['latitude'])
-    data['longitude'] = float(received['longitude'])
+    data['latitude'] = float(received['lat'])
+    data['longitude'] = float(received['lng'])
     data['name'] = str(received['name'])
 
     requests.post(send_url, json=data)

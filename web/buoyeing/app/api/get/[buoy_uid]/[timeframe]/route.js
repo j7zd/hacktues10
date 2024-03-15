@@ -69,16 +69,14 @@ export async function GET(req, { params }) {
 
 function initializeDatasets(labelsLength) {
     const measurementTypes = [
-        { label: 'Horizontal Movement (m)', color: '#2563eb' },
-        { label: 'Vertical Movement (m)', color: '#10b981' },
-        { label: 'Wind Direction (degrees)', color: '#d97706' },
-        { label: 'Wind Strength (m/s)', color: '#dc2626' },
         { label: 'Air Temperature (°C)', color: '#db2777' },
         { label: 'Air Humidity (%)', color: '#0369a1' },
+        { label: 'Atmospheric Pressure (hPa or mBar)', color: '#64748b' },
         { label: 'Water Temperature (°C)', color: '#9333ea' },
         { label: 'Water Salinity (PSU or PPT)', color: '#eab308' },
-        { label: 'Light Intensity (Lux)', color: '#f97316' },
-        { label: 'Atmospheric Pressure (hPa or mBar)', color: '#64748b' }
+        { label: 'Wave Intensity (m)', color: '#059669' },
+        { label: 'Turbidity (NTU or FNU)', color: '#d97706' },
+
     ];
 
 

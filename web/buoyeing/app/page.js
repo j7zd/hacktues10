@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 // import { World } from '@/components/interactiveGlobe';
 import MainButtons from '@/components/mainButtons';
 import globeConfig from '@/data/globeConfig.json';
+import 'leaflet/dist/leaflet.css'; // Ensure Leaflet's CSS is loaded
+
 
 const MainMap = dynamic(() => import('@/components/mainMap'), { ssr: false });
 const DynamicWorld = dynamic(() => import('@/components/interactiveGlobe').then((mod) => mod.World), {
@@ -22,12 +24,15 @@ export default function Home() {
           throw new Error('Network response was not ok');
         }
         const buoys = await response.json();
+        console.log('buoys:', buoys);
         const newLocations = buoys.map(buoy => ({
           lat: buoy.location.coordinates[0],
           lng: buoy.location.coordinates[1],
           color: 'rgba(255, 165, 0, 0.5)',
+          name: buoy.name,
         }));
         setLocations(newLocations);
+        console.log('newLocations:', newLocations);
       } catch (error) {
         console.error('Error fetching buoys:', error);
       }
@@ -37,6 +42,8 @@ export default function Home() {
       fetchBuoys();
     }
   }, [locations.length]); // Use locations.length to trigger the effect only when needed
+
+  // const HeatmapComponent = dynamic(() => import('@/components/mainMapWithHeatmap'), { ssr: false });
 
   return (
     <main className="flex flex-col items-center justify-between p-4 bg-gray-900 text-white">
@@ -51,12 +58,13 @@ export default function Home() {
         </div>
       </div>
 
-      <h2 className="my-4 text-lg text-gray-300">Разгледайте различните изследователски шамандури около Бургас!</h2>
+      <h2 className="my-4 text-lg text-gray-300 text-center">Разгледайте различните изследователски шамандури около Бургас!</h2>
 
-      <MainMap />
+      <MainMap locations={locations} />
+      {/* <HeatmapComponent data={heatmapLocations} /> */}
 
       <div className="flex space-x-4 mt-6">
-        <MainButtons />
+        <MainButtons key={locations.length} locations={locations} />
       </div>
     </main>
   );

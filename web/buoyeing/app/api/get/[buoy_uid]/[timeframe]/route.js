@@ -60,6 +60,7 @@ export async function GET(req, { params }) {
 
         // onsole.log('Data:', datasets);
 
+        console.log('Data:', JSON.stringify({ datasets }));
         return new Response(JSON.stringify({ datasets }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
         console.error('Error fetching data:', error);

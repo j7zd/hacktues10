@@ -1,78 +1,68 @@
 import { connectToDatabase } from '@/utils/database';
 import Buoy from '@/models/buoySchema';
 import BuoyData from '@/models/buoyDataSchema';
+import { v4 as uuidv4 } from 'uuid';
 
-// A helper function to generate random data
 const generateRandomData = (buoyUid) => {
     return {
         buoyUID: buoyUid,
         timestamp: new Date(),
-        location: {
-            type: 'Point',
-            coordinates: [
-                parseFloat((Math.random() * 360 - 180).toFixed(6)), // Longitude: -180 to 180
-                parseFloat((Math.random() * 180 - 90).toFixed(6)), // Latitude: -90 to 90
-            ],
-        },
-        movement: {
-            horizontal: Math.random() * 100, // Assuming meters
-            vertical: Math.random() * 100, // Assuming meters
-        },
-        wind: {
-            direction: Math.floor(Math.random() * 360), // 0 to 360 degrees
-            strength: Math.random() * 100, // Assuming m/s
-        },
         air: {
-            temp: Math.random() * 30 + 10, // Assuming 10°C to 40°C
-            humidity: Math.random() * 100, // 0% to 100%
+            temp: Math.random() * 30 + 10,
+            humidity: Math.random() * 100,
+            pressure: Math.random() * 20 + 980,
         },
         water: {
-            temp: Math.random() * 25 + 5, // Assuming 5°C to 30°C
-            salinity: Math.random() * 35 + 5, // Assuming 5 PSU to 40 PSU
+            temp: Math.random() * 25 + 5,
+            salinity: Math.random() * 35 + 5,
+            wave_intensity: Math.random() * 5,
+            turbidity: Math.random() * 10,
         },
-        light: Math.random() * 100000, // Assuming lux
-        atmosphericPressure: Math.random() * 20 + 980, // Assuming hPa, 980 to 1000
     };
 };
-// ! DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA !
-const BUOY_UID = '343242-848c-4f72-9942-3424234234234'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
-const NAME = 'kkakakakaka'; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
-const COORDS = [42.496770, 27.450344]; // DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA
-// ! DA SE PROMENI AKO SHTE SHTE SE SLAGA RANDOM DATA !
 
-export async function POST(req, res) {
-    if (process.env.DEBUG === 1) return NextResponse.json({ message: 'Debug mode is enabled' }, { status: 200 });
+const CONTINUE_CYCLE = 6; // Set to however many cycles you want
+
+export async function GET() {
+    if (process.env.DEBUG === 1) {
+        console.log('Debug mode is enabled');
+        return new Response(JSON.stringify({ success: false, error: 'Debug mode is enabled' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' },
+        });
+    }
 
     await connectToDatabase();
 
-    let buoy = await Buoy.findOne({ uid: BUOY_UID });
-    if (!buoy) {
-        // If not, create a new Buoy entry
-        buoy = new Buoy({
+    for (let i = 0; i < CONTINUE_CYCLE; i++) {
+        const BUOY_UID = uuidv4();
+        const NAME = `Buoy-${i}-${Date.now()}`;
+        const COORDS = [Math.random() * 180 - 90, Math.random() * 360 - 180]; // Random coords
+
+        let buoy = new Buoy({
             uid: BUOY_UID,
             name: NAME,
             location: {
                 type: 'Point',
-                coordinates: COORDS, // Example coordinates; adjust as needed
+                coordinates: COORDS,
             },
-            // Add other buoy details here
         });
         await buoy.save();
-    }
 
-    const sampleData = generateRandomData(buoy.uid);
-
-    try {
-        const newEntry = new BuoyData(sampleData);
-        const savedEntry = await newEntry.save();
-        // res.status(201).json({ message: 'Random data added successfully', data: savedEntry });
-        // NextApiResponse.status(201).json({ message: 'Random data added successfully', data: savedEntry });
-        // return NextResponse.json({ message: 'Random data added successfully', data: savedEntry }, { status: 201 });
-        // return new Response(JSON.stringify(response), { status: 200, headers: { 'Content-Type': 'application/json' } });
-        return new Response(JSON.stringify({ message: 'Random data added successfully', data: savedEntry }), { status: 201, headers: { 'Content-Type': 'application/json' } });
-    } catch (error) {
-        // res.status(500).json({ message: 'Failed to add random data', error: error.message });
-        // return NextResponse.json({ message: 'Failed to add random data', error: error.message }, { status: 500 });
-        return new Response(JSON.stringify({ message: 'Failed to add random data', error: error.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+        const entriesCount = Math.floor(Math.random() * (250 - 100 + 1)) + 100;
+        for (let j = 0; j < entriesCount; j++) {
+            const sampleData = generateRandomData(BUOY_UID);
+            try {
+                const newEntry = new BuoyData(sampleData);
+                await newEntry.save();
+            } catch (error) {
+                console.error('Failed to add random data', error);
+            }
+        }
+        console.log(`Cycle ${i + 1}: Random data for ${NAME} added successfully`);
+        return new Response(JSON.stringify({ success: true }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+        });
     }
 }

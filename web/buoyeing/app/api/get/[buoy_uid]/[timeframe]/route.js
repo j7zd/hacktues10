@@ -4,12 +4,13 @@ import { getTimeframeDates, fetchDataForBuoy } from '@/utils/getdata';
 export async function GET(req, { params }) {
     await connectToDatabase();
     const { buoy_uid, timeframe } = params;
+    console.log('Params:', buoy_uid, timeframe);
 
     try {
         const { startTime, endTime } = getTimeframeDates(timeframe);
         const dataEntries = await fetchDataForBuoy(buoy_uid, startTime, endTime);
 
-        // console.log('Data:', dataEntries);
+        // console.log('Dataentries:', dataEntries);
 
         let labels = [];
         // let startDate = new Date(startTime);
@@ -46,7 +47,7 @@ export async function GET(req, { params }) {
             let entryLabel = `${entry.timestamp.getUTCFullYear()}-${String(entry.timestamp.getUTCMonth() + 1).padStart(2, '0')}-${String(entry.timestamp.getUTCDate()).padStart(2, '0')}`;
             let index = labels.indexOf(entryLabel);
 
-            console.log('entryLabel:', entryLabel, labels, index);
+            // console.log('entryLabel:', entryLabel, labels, index);
             if (index !== -1) {
                 // console.log('entry:', entry);
                 aggregateData(entry, sums, counts, index);
@@ -60,7 +61,7 @@ export async function GET(req, { params }) {
 
         // onsole.log('Data:', datasets);
 
-        console.log('Data:', JSON.stringify({ datasets }));
+        // console.log('Data:', JSON.stringify({ datasets }));
         return new Response(JSON.stringify({ datasets }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
         console.error('Error fetching data:', error);

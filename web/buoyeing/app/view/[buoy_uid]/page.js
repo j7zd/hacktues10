@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
 // import { ResponsiveLine } from "@nivo/line"
 import { Chart, Line } from 'react-chartjs-2';
@@ -18,17 +18,18 @@ import {
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip);
 
 export default function viewBuoy() {
+    const params = useParams();
     const [data, setData] = useState({ datasets: [] });
     const [requestData, setRequestData] = useState(1);
-    const [timeframe, setTimeframe] = useState('day'); // day, month, year
+    const [timeframe, setTimeframe] = useState('all'); // day, month, year
 
-    const searchParams = useSearchParams();
-    const buoy_uid = searchParams.get('buoy_uid');
+    const buoy_uid = params.buoy_uid;
 
     useEffect(() => {
         // fetch from /api/get/[buoy_uid]/[timeframe]
         const fetchData = async () => {
             try {
+                console.log('Fetching data for:', buoy_uid, timeframe);
                 const response = await fetch(`/api/get/${buoy_uid}/${timeframe}`);
                 const data = await response.json();
                 setData(data);

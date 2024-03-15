@@ -3,10 +3,17 @@ import Buoy from '@/models/buoySchema';
 import BuoyData from '@/models/buoyDataSchema';
 import { v4 as uuidv4 } from 'uuid';
 
+const generateRandomDate = () => {
+    const start = new Date();
+    start.setFullYear(start.getFullYear() - 1); // Set start date to one year ago
+    const end = new Date();
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+};
+
 const generateRandomData = (buoyUid) => {
     return {
         buoyUID: buoyUid,
-        timestamp: new Date(),
+        timestamp: generateRandomDate(), // Use the generateRandomDate function
         air: {
             temp: Math.random() * 30 + 10,
             humidity: Math.random() * 100,
@@ -24,7 +31,7 @@ const generateRandomData = (buoyUid) => {
 const CONTINUE_CYCLE = 6; // Set to however many cycles you want
 
 export async function GET() {
-    if (process.env.DEBUG === 1) {
+    if (process.env.DEBUG === 1) { // Make sure to compare string to string
         console.log('Debug mode is enabled');
         return new Response(JSON.stringify({ success: false, error: 'Debug mode is enabled' }), {
             status: 400,
@@ -60,9 +67,11 @@ export async function GET() {
             }
         }
         console.log(`Cycle ${i + 1}: Random data for ${NAME} added successfully`);
-        return new Response(JSON.stringify({ success: true }), {
-            status: 200,
-            headers: { 'Content-Type': 'application/json' },
-        });
     }
+
+    // Move the response outside of the loop to ensure it only sends after all cycles are complete
+    return new Response(JSON.stringify({ success: true }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+    });
 }

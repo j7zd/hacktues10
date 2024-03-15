@@ -1,8 +1,7 @@
 import { Inter } from 'next/font/google'
 import { Providers } from "@/components/theme-provider"
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@nextui-org/react";
-
 import './globals.css'
+import NavBar from '@/components/navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +19,7 @@ export default function RootLayout({ children }) {
           // enableSystem
           disableTransitionOnChange
         >
+          <NavBar />
           {children}
         </Providers>
       </body>

@@ -43,10 +43,8 @@ export default function viewBuoy() {
 
 
     useEffect(() => {
-        // fetch from /api/get/[buoy_uid]/[timeframe]
         const fetchData = async () => {
             try {
-                // console.log('Fetching data for:', buoy_uid, timeframe);
                 const response = await fetch(`/api/get/${buoy_uid}/${timeframe}`);
                 const data = await response.json();
                 setData(data);
@@ -55,12 +53,12 @@ export default function viewBuoy() {
                 console.error('Error:', error);
                 throw error;
             }
-        }
+        };
 
         if (requestData) {
             fetchData();
         }
-    }, [requestData])
+    }, [buoy_uid, timeframe, requestData]);
 
     const options = {
         responsive: true,

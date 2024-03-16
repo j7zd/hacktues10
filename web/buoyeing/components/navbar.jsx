@@ -10,7 +10,7 @@ function NavBar() {
 
   const menuItems = [
     { label: "Documentation", color: "foreground", href: "#" },
-    { label: "Buoys", color: "foreground", href: "#" },
+    { label: "Buoys", color: "foreground", href: "/buoys" },
     { label: "Demo", color: "foreground", href: "#" },
     { label: "HTX Team", color: "foreground", href: "https://hacktues.bg/teams/nikva-stoynost" },
     { label: "GitHub", color: "foreground", href: "https://github.com/j7zd/hacktues10" }

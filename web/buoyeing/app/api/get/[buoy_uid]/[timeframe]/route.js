@@ -65,7 +65,8 @@ export async function GET(req, { params }) {
 
                     break;
                 case 'all':
-                    // add everythin to the dataset, but beautify timestamps
+                    dataOfType.sort((a, b) => a.timestamp - b.timestamp);
+
                     dataOfType.forEach(entry => {
                         dataset.labels.push(`${entry.timestamp.getUTCFullYear()}-${String(entry.timestamp.getUTCMonth() + 1).padStart(2, '0')}-${String(entry.timestamp.getUTCDate()).padStart(2, '0')}`);
                         dataset.datasets[0].data.push(entry.value);

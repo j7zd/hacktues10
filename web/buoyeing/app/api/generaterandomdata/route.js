@@ -28,51 +28,60 @@ const generateRandomData = (buoyUid) => {
     };
 };
 
-const CONTINUE_CYCLE = 5; // Set to however many cycles you want
+const CONTINUE_CYCLE = 1; 
 
 export async function GET() {
-    if (process.env.DEBUG === 1) { // Make sure to compare string to string
-        console.log('Debug mode is enabled');
-        return new Response(JSON.stringify({ success: false, error: 'Debug mode is enabled' }), {
-            status: 400,
+    try {
+        if (process.env.DEBUG === 1) { 
+            console.log('Debug mode is enabled');
+            return new Response(JSON.stringify({ success: false, error: 'Debug mode is enabled' }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
+        await connectToDatabase();
+
+        for (let i = 0; i < CONTINUE_CYCLE; i++) {
+            const BUOY_UID = uuidv4();
+            const NAME = `Buoy-${i}-${Date.now()}`;
+            const COORDS = [Math.random() * 360 - 180, Math.random() * 180 - 90]; // Correctly ordered coords
+
+
+            let buoy = new Buoy({
+                uid: BUOY_UID,
+                name: NAME,
+                location: {
+                    type: 'Point',
+                    coordinates: COORDS,
+                },
+            });
+            await buoy.save();
+
+            const entriesCount = Math.floor(Math.random() * (250 - 100 + 1)) + 100;
+            for (let j = 0; j < entriesCount; j++) {
+                const sampleData = generateRandomData(BUOY_UID);
+                try {
+                    const newEntry = new BuoyData(sampleData);
+                    await newEntry.save();
+                } catch (error) {
+                    console.error('Failed to add random data', error);
+                }
+            }
+            console.log(`Cycle ${i + 1}: Random data for ${NAME} added successfully`);
+        }
+
+        // Move the response outside of the loop to ensure it only sends after all cycles are complete
+        return new Response(JSON.stringify({ success: true }), {
+            status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
     }
-
-    await connectToDatabase();
-
-    for (let i = 0; i < CONTINUE_CYCLE; i++) {
-        const BUOY_UID = uuidv4();
-        const NAME = `Buoy-${i}-${Date.now()}`;
-        const COORDS = [Math.random() * 360 - 180, Math.random() * 180 - 90]; // Correctly ordered coords
-
-
-        let buoy = new Buoy({
-            uid: BUOY_UID,
-            name: NAME,
-            location: {
-                type: 'Point',
-                coordinates: COORDS,
-            },
+    catch (error) {
+        console.error('Error generating random data:', error);
+        return new Response(JSON.stringify({ success: false, error: error.message }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' },
         });
-        await buoy.save();
-
-        const entriesCount = Math.floor(Math.random() * (250 - 100 + 1)) + 100;
-        for (let j = 0; j < entriesCount; j++) {
-            const sampleData = generateRandomData(BUOY_UID);
-            try {
-                const newEntry = new BuoyData(sampleData);
-                await newEntry.save();
-            } catch (error) {
-                console.error('Failed to add random data', error);
-            }
-        }
-        console.log(`Cycle ${i + 1}: Random data for ${NAME} added successfully`);
     }
-
-    // Move the response outside of the loop to ensure it only sends after all cycles are complete
-    return new Response(JSON.stringify({ success: true }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-    });
 }

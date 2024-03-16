@@ -44,7 +44,8 @@ export async function GET() {
     for (let i = 0; i < CONTINUE_CYCLE; i++) {
         const BUOY_UID = uuidv4();
         const NAME = `Buoy-${i}-${Date.now()}`;
-        const COORDS = [Math.random() * 180 - 90, Math.random() * 360 - 180]; // Random coords
+        const COORDS = [Math.random() * 360 - 180, Math.random() * 180 - 90]; // Correctly ordered coords
+
 
         let buoy = new Buoy({
             uid: BUOY_UID,

@@ -17,7 +17,7 @@ import {
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip);
 
-export default function viewBuoy() {
+export default function ViewBuoy() {
     const params = useParams();
     const [data, setData] = useState({ datasets: [] });
     const [requestData, setRequestData] = useState(1);

@@ -28,7 +28,7 @@ const generateRandomData = (buoyUid) => {
     };
 };
 
-const CONTINUE_CYCLE = 6; // Set to however many cycles you want
+const CONTINUE_CYCLE = 5; // Set to however many cycles you want
 
 export async function GET() {
     if (process.env.DEBUG === 1) { // Make sure to compare string to string

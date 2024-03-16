@@ -2,8 +2,8 @@
 #include <ArduinoJson.h>
 SoftwareSerial ESP8266(6, 5); // Rx, Tx
 
-#define UID "qwerty"
-#define NAME "6rek"
+#define UID qwerty
+#define NAME 6rek
 #define LONGTITUDE 69.6
 #define LATITUDE 42.0
 
@@ -18,37 +18,38 @@ unsigned long startTime = 0;
 String myAPIkey = "1YJXB9J5RLDOURL6"; // Your Write API Key
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   ESP8266.begin(9600);
   startTime = millis();
-  connectToWiFi();
-
+  //connectToWiFi();
+  
   // setup the sensors
-  PresureAndTemperatureSetup();
   HumiditySetup();
+  TempSetup();
+
   initTDS(TDS_PIN);
   turbiditySetup(TURBIDITY_PIN);
-  //WaveSensorINIT();
+  WaveSensorINIT();
 
-  Serial.println("Finished init");
+  Serial.print("Finished init");
 }
 
 void loop() {
 
-  double pressure, air_temperature;
-  PresAndTempAir(air_temperature, pressure);
+  double air_temperature = TemperatureAir();
   double humidity = HumidityAir();
   double salinity = getTDS();
   double water_temperature = readTemperature(TEMP_PIN);
   double turbidity = readTurbidity();
-  double wave_intensity = 0;
+  double wave_intensity = CalculateWaves();
   
-  String jsonData = "{\"uid\":\"" + String(UID) + "\",\"name\":\"" + String(NAME) + "\",\"longtitude\":" + String(LONGTITUDE, 6) + ",\"latitude\":" + String(LATITUDE, 6) + ",\"pressure\":" + String(pressure, 2) + ",\"air_temperature\":" + String(air_temperature, 2) + ",\"humidity\":" + String(humidity, 2) + ",\"salinity\":" + String(salinity, 2) + ",\"water_temperature\":" + String(water_temperature, 2) + ",\"turbidity\":" + String(turbidity, 2) + ",\"wave_intensity\":" + String(wave_intensity, 2) + "}";
+  Serial.println("Temperature: " + String(air_temperature, 2) + " C");
+  Serial.println("Humidity: " + String(humidity, 2) + " %");
+  Serial.println("Salinity: " + String(salinity, 2) + " ppm");
+  Serial.println("Water Temperature: " + String(water_temperature, 2) + " C");
+  Serial.println("Turbidity: " + String(turbidity, 2) + " NTU");
+  Serial.println("Wave Intensity: " + String(wave_intensity, 2) + " m/s^2");
 
-  if (startTCPConnection()) {
-    sendHTTPPostRequest(jsonData);
-  }
-  
   delay(10000);
 }
 

@@ -43,13 +43,13 @@ export const getTimeframeDates = (timeframe) => {
     return { startTime, endTime };
 };
 
-export const fetchDataForBuoy = async (buoy_uid, startTime, endTime) => {
+export const fetchDataForBuoy = async (buoy_uid, startTime, endTime) => { // start and end time are not currently used
     try {
         console.log('Fetching data for buoy:', buoy_uid, 'from', startTime, 'to', endTime);
         // Ensure your schema defines buoyUID as a String to match this query
         return await BuoyData.find({
             buoyUID: buoy_uid,
-            timestamp: { $gte: startTime, $lte: endTime },
+            // timestamp: { $gte: startTime, $lte: endTime },
         }).lean();
     } catch (error) {
         console.error('Error fetching buoy data:', error);

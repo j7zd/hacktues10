@@ -19,8 +19,8 @@ export async function GET(req, { params }) {
     console.log('Params:', buoy_uid, timeframe);
 
     try {
-        const { startTime, endTime } = getTimeframeDates(timeframe);
-        const dataEntries = await fetchDataForBuoy(buoy_uid, startTime, endTime);
+        const { startTime, endTime } = getTimeframeDates(timeframe); // start and end time are not currently used
+        const dataEntries = await fetchDataForBuoy(buoy_uid, startTime, endTime); // start and end time are not currently used
 
         console.log('Dataentries:', dataEntries);
         let finalData = [];
@@ -56,13 +56,13 @@ export async function GET(req, { params }) {
             // depending on the timeframe, add this data to the dataset
             switch (timeframe) {
                 case 'day':
-                    // get the data for the current day
+
                     break;
                 case 'month':
-                    // get the data for the current month
+
                     break;
                 case 'year':
-                    // get the data for the current year
+
                     break;
                 case 'all':
                     // add everythin to the dataset, but beautify timestamps

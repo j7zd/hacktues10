@@ -1,6 +1,18 @@
 import { connectToDatabase } from '@/utils/database';
 import { getTimeframeDates, fetchDataForBuoy } from '@/utils/getdata';
 
+const measurementTypes = [
+    { label: 'Air Temperature (°C)', color: '#db2777' },
+    { label: 'Air Humidity (%)', color: '#0369a1' },
+    { label: 'Atmospheric Pressure (hPa or mBar)', color: '#64748b' },
+    { label: 'Water Temperature (°C)', color: '#9333ea' },
+    { label: 'Water Salinity (PSU or PPT)', color: '#eab308' },
+    { label: 'Wave Intensity (m)', color: '#059669' },
+    { label: 'Turbidity (NTU or FNU)', color: '#d97706' },
+
+];
+
+
 export async function GET(req, { params }) {
     await connectToDatabase();
     const { buoy_uid, timeframe } = params;
@@ -10,14 +22,65 @@ export async function GET(req, { params }) {
         const { startTime, endTime } = getTimeframeDates(timeframe);
         const dataEntries = await fetchDataForBuoy(buoy_uid, startTime, endTime);
 
-        // console.log('Dataentries:', dataEntries);
-
+        console.log('Dataentries:', dataEntries);
+        let finalData = [];
         let labels = [];
         // let startDate = new Date(startTime);
         // while (startDate <= endTime) {
         //     labels.push(`${startDate.getUTCFullYear()}-${String(startDate.getUTCMonth() + 1).padStart(2, '0')}-${String(startDate.getUTCDate()).padStart(2, '0')}`);
         //     startDate.setUTCDate(startDate.getUTCDate() + 1);
         // }
+
+        // for each of the measurement types, create a dataset
+        for (let i = 0; i < measurementTypes.length; i++) {
+            let dataset = {
+                labels: [],
+                datasets: [
+                    {
+                        label: measurementTypes[i].label,
+                        data: [],
+                        // backgroundColor: measurementTypes[i].color,
+                        // borderColor: measurementTypes[i].color
+                        fill: false,
+                        lineTension: 0.5,
+                        backgroundColor: 'rgba(75,192,192,0.4)',
+                        borderColor: 'rgba(0,0,0,1)',
+                        borderWidth: 2,
+                    }
+                ],
+            };
+
+            // get data entried only for the current measurement type
+            const dataOfType = getAllEntriedOfAType(dataEntries, measurementTypes[i].label);
+
+            // depending on the timeframe, add this data to the dataset
+            switch (timeframe) {
+                case 'day':
+                    // get the data for the current day
+                    break;
+                case 'month':
+                    // get the data for the current month
+                    break;
+                case 'year':
+                    // get the data for the current year
+                    break;
+                case 'all':
+                    // add everythin to the dataset, but beautify timestamps
+                    dataOfType.forEach(entry => {
+                        dataset.labels.push(`${entry.timestamp.getUTCFullYear()}-${String(entry.timestamp.getUTCMonth() + 1).padStart(2, '0')}-${String(entry.timestamp.getUTCDate()).padStart(2, '0')}`);
+                        dataset.datasets[0].data.push(entry.value);
+                    });
+                    break;
+                default:
+                    // get all the data
+                    break;
+            }
+
+            finalData.push(dataset);
+        }
+
+        return new Response(JSON.stringify({ datasets: finalData }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+
         // Assuming dataEntries is sorted by date:
         if (dataEntries.length > 0) {
             let firstEntryDate = new Date(dataEntries[0].timestamp);
@@ -70,17 +133,6 @@ export async function GET(req, { params }) {
 }
 
 function initializeDatasets(labelsLength) {
-    const measurementTypes = [
-        { label: 'Air Temperature (°C)', color: '#db2777' },
-        { label: 'Air Humidity (%)', color: '#0369a1' },
-        { label: 'Atmospheric Pressure (hPa or mBar)', color: '#64748b' },
-        { label: 'Water Temperature (°C)', color: '#9333ea' },
-        { label: 'Water Salinity (PSU or PPT)', color: '#eab308' },
-        { label: 'Wave Intensity (m)', color: '#059669' },
-        { label: 'Turbidity (NTU or FNU)', color: '#d97706' },
-
-    ];
-
     return measurementTypes.map(type => ({
         label: type.label,
         data: new Array(labelsLength).fill(0),
@@ -137,6 +189,42 @@ function calculateAverages(datasets, sums, counts) {
             datasets[i].data[j] = counts[i][j] > 0 ? sums[i][j] / counts[i][j] : 0;
         }
     }
+}
+
+
+function getAllEntriedOfAType(dataEntries, type) {
+    return dataEntries.map(entry => {
+        let value;
+        switch (type) {
+            case 'Air Temperature (°C)':
+                value = entry.air.temp;
+                break;
+            case 'Air Humidity (%)':
+                value = entry.air.humidity;
+                break;
+            case 'Atmospheric Pressure (hPa or mBar)':
+                value = entry.air.pressure;
+                break;
+            case 'Water Temperature (°C)':
+                value = entry.water.temp;
+                break;
+            case 'Water Salinity (PSU or PPT)':
+                value = entry.water.salinity;
+                break;
+            case 'Wave Intensity (m)':
+                value = entry.water.wave_intensity;
+                break;
+            case 'Turbidity (NTU or FNU)':
+                value = entry.water.turbidity;
+                break;
+            default:
+                break;
+        }
+        return {
+            timestamp: entry.timestamp,
+            value
+        }
+    });
 }
 
 

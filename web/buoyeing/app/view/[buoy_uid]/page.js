@@ -25,18 +25,35 @@ export default function viewBuoy() {
 
     const buoy_uid = params.buoy_uid;
 
+    const dataToTest = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        datasets: [
+            {
+                label: 'Rainfall',
+                fill: false,
+                lineTension: 0.5,
+                backgroundColor: 'rgba(75,192,192,0.4)',
+                borderColor: 'rgba(0,0,0,1)',
+                borderWidth: 2,
+                data: [65, 59, 80, 81, 56, 55, 40]
+            }
+        ]
+    }
+
+
+
     useEffect(() => {
         // fetch from /api/get/[buoy_uid]/[timeframe]
         const fetchData = async () => {
             try {
-                console.log('Fetching data for:', buoy_uid, timeframe);
+                // console.log('Fetching data for:', buoy_uid, timeframe);
                 const response = await fetch(`/api/get/${buoy_uid}/${timeframe}`);
                 const data = await response.json();
                 setData(data);
-                console.log('Data:', data);
                 setRequestData(0);
             } catch (error) {
                 console.error('Error:', error);
+                throw error;
             }
         }
 
@@ -79,26 +96,36 @@ export default function viewBuoy() {
 
     return (
         // on desktop - w-[80%]
-        <Card className="w-full ">
-            <CardHeader className="flex flex-col items-start gap-1.5">
-                <CardTitle>
-                    Graph Analytics</CardTitle>
-                <CardDescription>Real-time Sensor Data</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-wrap justify-center items-stretch gap-4">
-                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full sm:w-1/2 xl:w-1/4 h-[400px] md:h-auto">
-                    <Line data={data} options={options} />
-                </div>
-                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full sm:w-1/2 xl:w-1/4 h-[400px] md:h-auto">
-                    <Line data={data} options={options} />
-                </div>
-                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full sm:w-1/2 xl:w-1/4 h-[400px] md:h-auto">
-                    <Line data={data} options={options} />
-                </div>
-                <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full sm:w-1/2 xl:w-1/4 h-[400px] md:h-auto">
-                    <Line data={data} options={options} />
-                </div>
-            </CardContent>
-        </Card>
+        // <Card className="w-full ">
+        //     <CardHeader className="flex flex-col items-start gap-1.5">
+        //         <CardTitle>
+        //             Graph Analytics</CardTitle>
+        //         <CardDescription>Real-time Sensor Data</CardDescription>
+        //     </CardHeader>
+        //     <CardContent className="flex flex-wrap justify-center items-stretch gap-4">
+        //         {/* map over data */}
+        //         <div className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full md:h-auto">
+        //             <Line data={data} options={options} />
+        //         </div>
+        //     </CardContent>
+        // </Card>
+        <main className="flex flex-col items-center p-4 bg-gray-900 text-white min-h-screen">
+            <h1 className="text-4xl font-bold mb-4">Шамандура</h1>
+            {/* Flex container for buttons, allowing wrap */}
+            <div className="flex flex-wrap justify-center gap-4 w-full max-w-4xl">
+                {data.datasets && data.datasets.map((dataset, index) => (
+                    <div key={index} className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full md:h-auto">
+                        <Line data={dataset} options={options} />
+                        {/* show dataset as text */}
+                        {/* <h2>{dataset.label}</h2> */}
+                        {/* <h2>{JSON.stringify(dataset)}</h2> */}
+                        {/* <h2>{dataset.label}</h2> */}
+                    </div>
+                ))}
+                {/* <div  className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg w-full md:h-auto">
+                    <Line data={dataToTest} options={options} />
+                </div> */}
+            </div>
+        </main>
     )
 }

@@ -1,9 +1,9 @@
 #include <SoftwareSerial.h>
 #include <ArduinoJson.h>
-SoftwareSerial ESP8266(6, 5); // Rx, Tx
+SoftwareSerial ESP8266(5, 6); // Rx, Tx
 
-#define UID qwerty
-#define NAME 6rek
+#define UID "qwerty"
+#define NAME "6rek"
 #define LONGTITUDE 69.6
 #define LATITUDE 42.0
 
@@ -18,6 +18,9 @@ unsigned long startTime = 0;
 String myAPIkey = "1YJXB9J5RLDOURL6"; // Your Write API Key
 
 void setup() {
+  
+
+
   Serial.begin(9600);
   ESP8266.begin(9600);
   startTime = millis();
@@ -35,27 +38,27 @@ void setup() {
 }
 
 void loop() {
+  double pressure=0, air_temperature=0;
+  //PresAndTempAir(air_temperature, pressure);
+  double humidity = 0;//HumidityAir();
+  double salinity = 0;//getTDS();
+  double water_temperature = 0;//readTemperature(TEMP_PIN);
+  double turbidity = 0;//readTurbidity();
+  double wave_intensity = 0;
 
-  double air_temperature = TemperatureAir();
-  double humidity = HumidityAir();
-  double salinity = getTDS();
-  double water_temperature = readTemperature(TEMP_PIN);
-  double turbidity = readTurbidity();
-  double wave_intensity = CalculateWaves();
   
-  Serial.println("Temperature: " + String(air_temperature, 2) + " C");
-  Serial.println("Humidity: " + String(humidity, 2) + " %");
-  Serial.println("Salinity: " + String(salinity, 2) + " ppm");
-  Serial.println("Water Temperature: " + String(water_temperature, 2) + " C");
-  Serial.println("Turbidity: " + String(turbidity, 2) + " NTU");
-  Serial.println("Wave Intensity: " + String(wave_intensity, 2) + " m/s^2");
+  String json = "{\"UID\":\"" + String(UID) + "\",\"name\":\"" + String(NAME) + "\",\"longitude\":" + String(LONGTITUDE, 6) + ",\"latitude\":" + String(LATITUDE, 6) + ",\"pressure\":" + String(pressure, 2) + ",\"air_temperature\":" + String(air_temperature, 2) + ",\"humidity\":" + String(humidity, 2) + ",\"salinity\":" + String(salinity, 2) + ",\"water_temperature\":" + String(water_temperature, 2) + ",\"turbidity\":" + String(turbidity, 2) + ",\"wave_intensity\":" + String(wave_intensity, 2) + "}";
+  Serial.println(json);
 
+  ESP8266.println(json);
+
+  
   delay(10000);
 }
 
 void connectToWiFi() {
   Serial.println("Connecting to WiFi...");
-  ESP8266.print("AT+CWJAP=\"Buoy\",\"shrekisloveshrekislife\"\r\n");
+  ESP8266.print("AT+CWJAP=\"Buoys\",\"shrekislove\"\r\n");
   long startTime = millis();
   while (millis() - startTime < 15000) { // 15 seconds timeout
     if (ESP8266.find("WIFI CONNECTED")) {
@@ -66,12 +69,6 @@ void connectToWiFi() {
   Serial.println("WiFi Connect Timeout.");
 }
 
-void sendToThingSpeak(float temperature) {
-  if (startTCPConnection()) {
-    String jsonData = "{\"temp\":" + String(temperature, 2) + "}";
-    sendHTTPPostRequest(jsonData);
-  }
-}
 
 bool startTCPConnection() {
   String cmd = "AT+CIPSTART=\"TCP\",\"192.168.61.236\",5000";
@@ -83,7 +80,7 @@ bool startTCPConnection() {
   return true;
 }
 
-void sendHTTPPostRequest(String jsonData) {
+void sendHTTPPostRequest(const String jsonData) {
   String postRequest = "POST / HTTP/1.1\r\n";
   postRequest += "Host: 192.168.61.236\r\n";
   postRequest += "Connection: close\r\n";

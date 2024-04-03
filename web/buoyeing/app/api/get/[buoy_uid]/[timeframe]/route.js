@@ -1,3 +1,32 @@
+/**
+ * @swagger
+ * /api/get/{buoy_uid}/{timeframe}:
+ *   get:
+ *     summary: Retrieve data for a specific buoy within a given timeframe
+ *     description: Returns data for the specified buoy and timeframe.
+ *     parameters:
+ *       - in: path
+ *         name: buoy_uid
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique identifier for the buoy.
+ *       - in: path
+ *         name: timeframe
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Timeframe for the data ('day', 'month', 'year', 'all').
+ *     responses:
+ *       200:
+ *         description: Data for the specified buoy and timeframe.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BuoyData'
+ *       500:
+ *         description: Failed to fetch data
+ */
 import { connectToDatabase } from '@/utils/database';
 import { getTimeframeDates, fetchDataForBuoy } from '@/utils/getdata';
 

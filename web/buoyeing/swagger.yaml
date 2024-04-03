@@ -1,0 +1,151 @@
+swagger: '2.0'
+info:
+  title: Buoy Data API
+  version: '1.0.0'
+  description: API for managing buoy data
+host: 'localhost:3000'
+schemes:
+  - http
+basePath: '/api'
+paths:
+  /get/all:
+    get:
+      summary: Retrieve all buoys
+      description: Returns a list of all buoys
+      responses:
+        200:
+          description: Successful response with a list of buoys
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Buoy'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+  /get/{buoy_uid}/{timeframe}:
+    get:
+      summary: Retrieve data for a specific buoy within a given timeframe
+      description: Returns buoy data for the specified timeframe
+      parameters:
+        - name: buoy_uid
+          in: path
+          required: true
+          type: string
+          description: Unique identifier for the buoy
+        - name: timeframe
+          in: path
+          required: true
+          type: string
+          description: Timeframe for the data ('day', 'month', 'year', 'all')
+      responses:
+        200:
+          description: Successful response with data for the specified buoy and timeframe
+          schema:
+            $ref: '#/definitions/BuoyData'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+  /add:
+    post:
+      summary: Add data for a buoy
+      description: Creates a new buoy data entry
+      parameters:
+        - in: body
+          name: buoyData
+          required: true
+          schema:
+            $ref: '#/definitions/NewBuoyData'
+      responses:
+        200:
+          description: Successful creation of buoy data
+          schema:
+            $ref: '#/definitions/BuoyDataResponse'
+        500:
+          description: Server error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Buoy:
+    type: object
+    properties:
+      uid:
+        type: string
+      name:
+        type: string
+      location:
+        type: object
+        properties:
+          type:
+            type: string
+          coordinates:
+            type: array
+            items:
+              type: number
+  BuoyData:
+    type: object
+    properties:
+      buoyUID:
+        type: string
+      timestamp:
+        type: string
+      format: date-time
+      air:
+        type: object
+        properties:
+          temp:
+            type: number
+          humidity:
+            type: number
+          pressure:
+            type: number
+      water:
+        type: object
+        properties:
+          temp:
+            type: number
+          salinity:
+            type: number
+          wave_intensity:
+            type: number
+          turbidity:
+            type: number
+  NewBuoyData:
+    type: object
+    properties:
+      wave_intensity:
+        type: number
+      turbidity:
+        type: number
+      water_temperature:
+        type: number
+      salinity:
+        type: number
+      air_temperature:
+        type: number
+      humidity:
+        type: number
+      pressure:
+        type: number
+      uid:
+        type: string
+      name:
+        type: string
+      lat:
+        type: number
+      lng:
+        type: number
+  BuoyDataResponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+      data:
+        $ref: '#/definitions/BuoyData'
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+        description: Error message

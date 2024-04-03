@@ -1,4 +1,21 @@
-// /api/get/all
+/**
+ * @swagger
+ * /api/get/all:
+ *   get:
+ *     summary: Retrieve all buoys
+ *     description: Returns a list of all buoys.
+ *     responses:
+ *       200:
+ *         description: A list of buoys.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Buoy'
+ *       500:
+ *         description: Failed to fetch data
+ */
 import { connectToDatabase } from '@/utils/database';
 import { getAllBuoys } from '@/utils/getdata';
 

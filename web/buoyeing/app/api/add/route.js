@@ -1,4 +1,25 @@
-// /api/get/all
+/**
+ * @swagger
+ * /api/add:
+ *   post:
+ *     summary: Add data for a buoy
+ *     description: Creates a new buoy data entry.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/NewBuoyData'
+ *     responses:
+ *       200:
+ *         description: Successful creation of buoy data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BuoyDataResponse'
+ *       500:
+ *         description: Server error
+ */
 import { connectToDatabase } from '@/utils/database';
 import Buoy from '@/models/buoySchema';
 import BuoyData from '@/models/buoyDataSchema';
@@ -11,8 +32,12 @@ export async function POST(req) {
     try {
         const { wave_intensity, turbidity, water_temperature, salinity, air_temperature, humidity, pressure, uid, name, lat, lng } = await req.json();
 
+        console.log('uid:', uid);
+        console.log('uid:', typeof(uid));
+
         // Find or create Buoy
-        let buoy = await Buoy.findOne({ uid: uid })
+        let buoy = await Buoy.findOne({ uid: uid });
+        console. log('buoy:', buoy);
         if (!buoy) {
             const generatedUID = uuidv4();
             console.log(generatedUID);

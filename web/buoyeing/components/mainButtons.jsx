@@ -16,7 +16,7 @@ export default function MainButtons() {
             <Card
                 className="bg-gray-800 border-gray-700 shadow-lg hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 cursor-pointer w-auto"
                 onClick={() => {
-                    window.location.href = "/docs"
+                    window.location.href = "/api-doc"
                 }}
             >
                 <CardHeader>

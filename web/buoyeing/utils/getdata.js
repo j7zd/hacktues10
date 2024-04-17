@@ -1,6 +1,6 @@
 import { Inter, Bebas_Neue } from 'next/font/google'
 import { Providers } from "@/components/theme-provider"
-import './globals.css'
+// import './globals.css'
 import NavBar from '@/components/navbar'
 
 const inter = Inter({ subsets: ['latin'] })

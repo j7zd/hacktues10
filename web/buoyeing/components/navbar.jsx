@@ -9,7 +9,7 @@ function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const menuItems = [
-    { label: "Documentation", color: "foreground", href: "#" },
+    { label: "Documentation", color: "foreground", href: "/api-doc" },
     { label: "Buoys", color: "foreground", href: "/buoys" },
     { label: "Demo", color: "foreground", href: "#" },
     { label: "HTX Team", color: "foreground", href: "https://hacktues.bg/teams/nikva-stoynost" },
@@ -34,7 +34,7 @@ function NavBar() {
 
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <Link color="foreground" href="/api-doc">
             Документация
           </Link>
         </NavbarItem>
